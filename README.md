@@ -9,8 +9,8 @@ specific tasks correctly in your environment. Loading a skill gives the
 agent up-to-date, site-specific knowledge without you having to explain
 the environment from scratch every session.
 
-!!! Note "Based on skills.cirrus.ac.uk"
-    This repository draws heavily on the original [skills.cirrus.ac.uk repository](https://github.com/cirrus-sc/skills.cirrus.ac.uk)
+!!! Note "Based on skills.isambard.ac.uk"
+    This repository draws heavily on the original [skills.isambard.ac.uk repository](https://github.com/isambard-sc/skills.isambard.ac.uk)
 
 ---
 
@@ -24,8 +24,6 @@ the environment from scratch every session.
 | [Spack](site/plugins/cirrus/skills/spack/SKILL.md) | Install, configure, and use Spack to build HPC software on Cirrus-AI and Cirrus 3, including the buildit config repository and targeting neoverse_v2 / aarch64 | `https://skills.cirrus.ac.uk/skills/spack/SKILL.md` |
 | [Containers](site/plugins/cirrus/skills/containers/SKILL.md) | Run containers on Cirrus using Podman-HPC and Apptainer. Covers image management, GPU access, and multi-node MPI/NCCL workloads over Slingshot 11 | `https://skills.cirrus.ac.uk/skills/containers/SKILL.md` |
 | [MPI](site/plugins/cirrus/skills/mpi/SKILL.md) | Use MPI on Cirrus with Cray MPICH or OpenMPI. Covers PMI types, srun --mpi flags, Slingshot 11 performance, and why mpirun/mpiexec must not be used | `https://skills.cirrus.ac.uk/skills/mpi/SKILL.md` |
-| [NCCL](site/plugins/cirrus/skills/nccl/SKILL.md) | Use NCCL for multi-node GPU communication on Cirrus-AI over Slingshot 11. Covers the brics/nccl module, aws-ofi-nccl plugin, building from source, and NCCL in containers | `https://skills.cirrus.ac.uk/skills/nccl/SKILL.md` |
-| [GPUs and CUDA](site/plugins/cirrus/skills/cuda/SKILL.md) | Use GPUs and CUDA on Cirrus-AI (NVIDIA GH200, sm_90). Covers cudatoolkit/nvhpc modules, compiling with nvcc, and CUDA forward compatibility via NGC containers or NVIDIA HPC SDK | `https://skills.cirrus.ac.uk/skills/cuda/SKILL.md` |
 
 ---
 
@@ -36,7 +34,7 @@ the environment from scratch every session.
 Add the Cirrus marketplace:
 
 ```
-/plugin marketplace add https://github.com/cirrus-sc/skills.cirrus.ac.uk
+/plugin marketplace add https://github.com/aturner-epcc/skills.cirrus.ac.uk
 ```
 
 Install the `cirrus` plugin from the marketplace:
@@ -99,8 +97,8 @@ Tested on Codex CLI `0.147.0`.
 Add the Cirrus plugin marketplace:
 
 ```cirrus-session
-$ codex plugin marketplace add cirrus-sc/skills.cirrus.ac.uk
-Added marketplace `cirrus-skills` from https://github.com/cirrus-sc/skills.cirrus.ac.uk.git.
+$ codex plugin marketplace add aturner-epcc/skills.cirrus.ac.uk
+Added marketplace `cirrus-skills` from https://github.com/aturner-epcc/skills.cirrus.ac.uk.git.
 Installed marketplace root: .../marketplaces/cirrus-skills
 ```
 
@@ -119,8 +117,8 @@ Tested on Cursor CLI `2026.08.04-aaa8809`.
 Add the Cirrus plugin marketplace:
 
 ```cirrus-session
-$ agent plugin marketplace add https://github.com/cirrus-sc/skills.cirrus.ac.uk
-Fetching plugins from https://github.com/cirrus-sc/skills.cirrus.ac.uk...
+$ agent plugin marketplace add https://github.com/aturner-epcc/skills.cirrus.ac.uk
+Fetching plugins from https://github.com/aturner-epcc/skills.cirrus.ac.uk...
 ✓ Added marketplace cirrus-skills (1 plugin)
   cirrus - AI agent skills for Cirrus HPC systems
 Tip: use /plugins in interactive mode to install plugins from this marketplace.
@@ -157,7 +155,7 @@ Install the `cirrus` plugin from the marketplace:
  Plugins: 1
  Installed: 1 (cirrus)
  Indexing: Last indexed 2026-08-11 14:14 UTC
- Source: https://github.com/cirrus-sc/skills.cirrus.ac.uk
+ Source: https://github.com/aturner-epcc/skills.cirrus.ac.uk
 
   → Browse plugins
     Remove marketplace
@@ -227,7 +225,7 @@ Tested on Antigravity CLI `1.1.12`.
 Install the `cirrus` plugin from the Cirrus Skills repository: 
 
 ```cirrus-session
-$ agy plugin install https://github.com/cirrus-sc/skills.cirrus.ac.uk/site
+$ agy plugin install https://github.com/aturner-epcc/skills.cirrus.ac.uk/site
 $ agy plugin enable cirrus
 ```
 

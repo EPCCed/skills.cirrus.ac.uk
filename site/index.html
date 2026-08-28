@@ -104,7 +104,7 @@
 <header>
   <h1>Cirrus AI Skills</h1>
   <p>
-    A curated collection of agent skills for working with Cirrus HPC
+    A curated collection of agent skills for working with Cirrus NCR
     systems — designed for use with Claude Code and other AI coding tools.
   </p>
 </header>
@@ -122,14 +122,14 @@
       scripts, and run commands correctly for that environment.
     </p>
     <p>
-      Skills hosted here cover Cirrus-specific workflows such as submitting
+      Skills hosted here cover Cirrus workflows such as submitting
       and managing HPC jobs. Each skill is a single file served directly from
       this site so that the URLs remain stable regardless of where the
       underlying repository is hosted.
     </p>
     <div class="note">
       For full Cirrus documentation visit
-      <a href="https://docs.cirrus.ac.uk" target="_blank">docs.cirrus.ac.uk</a>.
+      <a href="https://docs.cirrus.ac.uk" target="_blank">docs.isambard.ac.uk</a>.
     </div>
   </section>
 
@@ -140,41 +140,21 @@
       <div class="skill-card">
         <h3>Containers</h3>
         <p>
-          Run containers on Cirrus using Podman-HPC and Apptainer. Covers
-          image management, GPU access, and multi-node MPI/NCCL workloads over
+          Run containers on Cirrus using Apptainer. Covers
+          image management, and multi-node MPI workloads over
           Slingshot 11.
         </p>
-        <a href="plugins/cirrus/skills/containers/SKILL.md">View skill file &rarr;</a>
-      </div>
-
-      <div class="skill-card">
-        <h3>GPUs and CUDA</h3>
-        <p>
-          Use GPUs and CUDA on Cirrus-AI (NVIDIA GH200, sm_90). Covers
-          loading cudatoolkit/nvhpc modules, compiling with nvcc, and CUDA
-          forward compatibility.
-        </p>
-        <a href="plugins/cirrus/skills/cuda/SKILL.md">View skill file &rarr;</a>
+        <a href="plugins/isambard/skills/containers/SKILL.md">View skill file &rarr;</a>
       </div>
 
       <div class="skill-card">
         <h3>MPI</h3>
         <p>
-          Use MPI on Cirrus with Cray MPICH or OpenMPI. Covers PMI types,
+          Use MPI on Cirrus with Cray MPICH. Covers PMI types,
           srun --mpi flags, Slingshot 11 performance, and why mpirun/mpiexec
           must not be used.
         </p>
-        <a href="plugins/cirrus/skills/mpi/SKILL.md">View skill file &rarr;</a>
-      </div>
-
-      <div class="skill-card">
-        <h3>NCCL</h3>
-        <p>
-          Use NCCL for multi-node GPU communication on Cirrus-AI over
-          Slingshot 11. Covers the brics/nccl module, aws-ofi-nccl plugin, and
-          NCCL in containers.
-        </p>
-        <a href="plugins/cirrus/skills/nccl/SKILL.md">View skill file &rarr;</a>
+        <a href="plugins/isambard/skills/mpi/SKILL.md">View skill file &rarr;</a>
       </div>
 
       <div class="skill-card">
@@ -183,37 +163,37 @@
           Use the modules system, Cray Programming Environments, compiler
           wrappers, and profiling tools on Cirrus.
         </p>
-        <a href="plugins/cirrus/skills/modules/SKILL.md">View skill file &rarr;</a>
+        <a href="plugins/isambard/skills/modules/SKILL.md">View skill file &rarr;</a>
       </div>
 
       <div class="skill-card">
         <h3>Python</h3>
         <p>
-          Install and manage Python environments on Cirrus using Conda
+          Install and manage Python environments on Isambard using Conda
           (Miniforge), uv, or Cray Python. Covers aarch64 package builds and
           mpi4py.
         </p>
-        <a href="plugins/cirrus/skills/python/SKILL.md">View skill file &rarr;</a>
+        <a href="plugins/isambard/skills/python/SKILL.md">View skill file &rarr;</a>
       </div>
 
       <div class="skill-card">
         <h3>Slurm</h3>
         <p>
           Submit, monitor, and manage HPC jobs using the Slurm workload
-          manager on Cirrus systems. Covers job scripts, resource
+          manager on Isambard systems. Covers job scripts, resource
           allocation, monitoring, and safe polling intervals.
         </p>
-        <a href="plugins/cirrus/skills/slurm/SKILL.md">View skill file &rarr;</a>
+        <a href="plugins/isambard/skills/slurm/SKILL.md">View skill file &rarr;</a>
       </div>
 
       <div class="skill-card">
         <h3>Spack</h3>
         <p>
-          Install, configure, and use Spack to build HPC software on Cirrus.
+          Install, configure, and use Spack to build HPC software on Isambard.
           Covers the buildit config repository, environments, concretizing,
           installing, and aarch64 target builds.
         </p>
-        <a href="plugins/cirrus/skills/spack/SKILL.md">View skill file &rarr;</a>
+        <a href="plugins/isambard/skills/spack/SKILL.md">View skill file &rarr;</a>
       </div>
 
       </div>
@@ -257,8 +237,7 @@
     <pre><code>https://skills.cirrus.ac.uk/plugins/cirrus/skills/&lt;name&gt;/SKILL.md</code></pre>
 
     <div class="note">
-      More information on using skills with specific tools can be found in
-      the
+      The Cirrus documantation can be found at:
       <a href="https://docs.cirrus.ac.uk" target="_blank">Cirrus documentation</a>.
     </div>
   </section>
@@ -266,8 +245,8 @@
 </main>
 
 <footer>
-  &copy; Cirrus SC &mdash;
-  <a href="https://github.com/cirrus-sc/skills.cirrus.ac.uk"
+  &copy; Cirrus &mdash;
+  <a href="https://github.com/aturner-epcc/skills.isambard.ac.uk"
      target="_blank">View on GitHub</a> &mdash;
   <a href="https://docs.cirrus.ac.uk" target="_blank">Full documentation</a>
 </footer>

@@ -1,7 +1,7 @@
 {
   "name": "cirrus-skills",
   "owner": {
-    "name": "Cirrus SC",
+    "name": "Cirrus",
     "email": "support@cirrus.ac.uk"
   },
   "metadata": {
@@ -14,11 +14,11 @@
       "description": "AI agent skills for Cirrus HPC systems",
       "version": "1.0",
       "author": {
-        "name": "Cirrus SC"
+        "name": "Cirrus"
       },
       "source": "./site/plugins/cirrus",
       "homepage": "https://skills.cirrus.ac.uk",
-      "repository": "https://github.com/cirrus-sc/skills.cirrus.ac.uk"
+      "repository": "https://github.com/aturner-epcc/skills.cirrus.ac.uk"
     }
   ]
 }
