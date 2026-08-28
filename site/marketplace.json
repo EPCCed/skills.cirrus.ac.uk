@@ -10,38 +10,28 @@
     },
     {
       "name": "Python",
-      "description": "Install and manage Python environments on Cirrus using Conda (Miniforge), uv, or Cray Python. Covers virtual environments, building aarch64 packages from source, compiler flags, mpi4py, and finding arm64-compatible packages.",
+      "description": "Install and manage Python environments on Cirrus using Conda (Miniforge), uv, or Cray Python. Covers virtual environments, building aarch64 packages from source, compiler flags, mpi4py.",
       "url": "https://skills.cirrus.ac.uk/plugins/cirrus/skills/python/SKILL.md"
     },
     {
       "name": "Modules",
-      "description": "Use the modules system, Cray Programming Environments (PrgEnv-gnu, PrgEnv-cray), compiler wrappers (cc, CC, ftn), GNU and NVIDIA compilers, and profiling tools (gprof, Cray perftools, Nsight) on Cirrus.",
+      "description": "Use the modules system, Cray Programming Environments (PrgEnv-gnu, PrgEnv-cray, PrgEnv-intel, PrgEnv-aocc), compiler wrappers (cc, CC, ftn), compilers, and profiling tools (gprof, Cray perftools) on Cirrus.",
       "url": "https://skills.cirrus.ac.uk/plugins/cirrus/skills/modules/SKILL.md"
     },
     {
       "name": "Spack",
-      "description": "Install, configure, and use Spack to build HPC software on Cirrus-AI and Cirrus 3. Covers the buildit config repository, Spack environments, concretizing, installing, and targeting neoverse_v2 / aarch64.",
+      "description": "Install, configure, and use Spack to build HPC software on Cirrus. Covers the Cirrus config, Spack environments, concretizing, installing",
       "url": "https://skills.cirrus.ac.uk/plugins/cirrus/skills/spack/SKILL.md"
     },
     {
       "name": "Containers",
-      "description": "Run containers on Cirrus using Podman-HPC and Apptainer (formerly Singularity). Covers pulling, building, and migrating images, GPU access, single-node and multi-node MPI/NCCL workloads over Slingshot 11, and aarch64 image selection.",
+      "description": "Run containers on Cirrus using Apptainer (formerly Singularity). Covers pulling, building, and migrating images, single-node and multi-node MPI workloads over Slingshot 11.",
       "url": "https://skills.cirrus.ac.uk/plugins/cirrus/skills/containers/SKILL.md"
     },
     {
       "name": "MPI",
       "description": "Use MPI on Cirrus with Cray MPICH, OpenMPI, or conda-installed MPI. Covers PrgEnv loading, PMI types (cray_shasta, pmi2, pmix), srun --mpi flags, libfabric and Slingshot 11 performance, and why mpirun/mpiexec must not be used.",
       "url": "https://skills.cirrus.ac.uk/plugins/cirrus/skills/mpi/SKILL.md"
-    },
-    {
-      "name": "NCCL",
-      "description": "Use NCCL for multi-node GPU communication on Cirrus-AI over Slingshot 11. Covers the brics/nccl module, aws-ofi-nccl plugin, Slingshot environment variables, building NCCL from source, benchmarking with nccl-tests, and NCCL in Apptainer containers.",
-      "url": "https://skills.cirrus.ac.uk/plugins/cirrus/skills/nccl/SKILL.md"
-    },
-    {
-      "name": "GPUs and CUDA",
-      "description": "Use GPUs and CUDA on Cirrus-AI (NVIDIA GH200, sm_90). Covers loading cudatoolkit/nvhpc modules, compiling with nvcc -arch=sm_90, and CUDA forward compatibility for newer CUDA versions via NGC containers, NVIDIA HPC SDK, or conda cuda-compat.",
-      "url": "https://skills.cirrus.ac.uk/plugins/cirrus/skills/cuda/SKILL.md"
     }
   ]
 }
