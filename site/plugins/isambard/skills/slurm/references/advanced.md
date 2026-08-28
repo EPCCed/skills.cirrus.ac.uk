@@ -39,7 +39,7 @@ exit
 Use `--nodes` to request more than one node. `srun` launches processes across all allocated
 nodes automatically.
 
-**Isambard-AI** — use `--gpus-per-node=4` to request full nodes (4 GH200 Superchips each):
+**Cirrus-AI** — use `--gpus-per-node=4` to request full nodes (4 GH200 Superchips each):
 
 ```bash
 #!/bin/bash
@@ -52,7 +52,7 @@ nodes automatically.
 srun ./my_application
 ```
 
-**Isambard 3 Grace** — use `--ntasks-per-node` for MPI ranks per node (144 cores per node):
+**Cirrus 3 Grace** — use `--ntasks-per-node` for MPI ranks per node (144 cores per node):
 
 ```bash
 #!/bin/bash
@@ -85,7 +85,7 @@ Combines MPI (between processes) with OpenMP (threads within each process). Key 
 
 Product of `--ntasks-per-node` × `--cpus-per-task` = cores used per node.
 
-**Isambard-AI** — natural mapping: 1 MPI rank per Superchip × 72 OpenMP threads:
+**Cirrus-AI** — natural mapping: 1 MPI rank per Superchip × 72 OpenMP threads:
 
 ```bash
 #!/bin/bash
@@ -99,7 +99,7 @@ export OMP_NUM_THREADS=$SLURM_CPUS_PER_TASK
 srun ./my_hybrid_application
 ```
 
-**Isambard 3 Grace** — 1 MPI rank per Superchip × 72 OpenMP threads (2 ranks per node):
+**Cirrus 3 Grace** — 1 MPI rank per Superchip × 72 OpenMP threads (2 ranks per node):
 
 ```bash
 #!/bin/bash
@@ -186,7 +186,7 @@ Without `--exclusive`, both steps inherit the full job allocation and may confli
 Prevents other jobs from sharing the same physical node. **You are charged for the whole
 node regardless of how many GPUs or cores you actually request.**
 
-On Isambard-AI: a node has 4 GH200 Superchips. If you request `--gpus=1 --exclusive`,
+On Cirrus-AI: a node has 4 GH200 Superchips. If you request `--gpus=1 --exclusive`,
 you are charged for all 4. Only use when your workload is sensitive to co-tenant noise or
 requires exclusive access to all NUMA domains / memory.
 
@@ -263,7 +263,7 @@ reservation holds until the job finishes. This is why large arrays with long `--
 exhaust credit before the actual allocation is spent.
 
 To resolve limit errors: wait for running jobs to complete, then resubmit with tighter
-`--time` values. Check allocation in the [portal](https://portal.isambard.ac.uk).
+`--time` values. Check allocation in the [portal](https://portal.cirrus.ac.uk).
 
 ---
 

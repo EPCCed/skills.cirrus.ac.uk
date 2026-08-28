@@ -1,34 +1,34 @@
 ---
 name: nccl
 description: >
-  Guide for using NCCL (NVIDIA Collective Communications Library) on Isambard AI (BriCS)
-  supercomputers. Use this skill whenever a user asks about NCCL on Isambard, multi-node
+  Guide for using NCCL (NVIDIA Collective Communications Library) on Cirrus AI (BriCS)
+  supercomputers. Use this skill whenever a user asks about NCCL on Cirrus, multi-node
   GPU communication, the aws-ofi-nccl plugin, Slingshot 11 RDMA for GPU collectives,
   the brics/nccl module, NCCL environment variables (NCCL_NET, NCCL_SOCKET_IFNAME,
   FI_CXI_* variables), building NCCL or aws-ofi-nccl from source, benchmarking NCCL
   with nccl-tests, NCCL in containers (Apptainer/Singularity), or diagnosing slow
-  multi-node GPU bandwidth on Isambard-AI.
+  multi-node GPU bandwidth on Cirrus-AI.
   Also trigger for questions about GPUDirect RDMA on Slingshot, distributed training
   performance, or getting full interconnect bandwidth for GPU collective operations —
   even if the user doesn't explicitly say "NCCL".
-  Note: NCCL is only supported on Isambard-AI Phase 1 and Phase 2 — not Isambard 3.
+  Note: NCCL is only supported on Cirrus-AI Phase 1 and Phase 2 — not Cirrus 3.
 compatibility: >
-  Isambard-AI only. Requires access to an Isambard-AI login node, GPU compute
+  Cirrus-AI only. Requires access to an Cirrus-AI login node, GPU compute
   resources, and the brics/nccl module.
 metadata:
-  author: isambard-sc
+  author: cirrus-sc
   version: "1.0"
-  source_url: https://docs.isambard.ac.uk/user-documentation/guides/nccl/
+  source_url: https://docs.cirrus.ac.uk/user-documentation/guides/nccl/
 ---
 
-# NCCL on Isambard
+# NCCL on Cirrus
 
 NCCL (NVIDIA Collective Communications Library) provides direct GPU-to-GPU communication
-for collective operations (all-reduce, broadcast, etc.). On Isambard-AI it uses **RDMA via
+for collective operations (all-reduce, broadcast, etc.). On Cirrus-AI it uses **RDMA via
 GPUDirect** over the **Slingshot 11** high-speed network.
 
-> **Supported systems:** Isambard-AI Phase 1 ✓ and Phase 2 ✓ only.
-> Isambard 3 does not support NCCL (no GPUs).
+> **Supported systems:** Cirrus-AI Phase 1 ✓ and Phase 2 ✓ only.
+> Cirrus 3 does not support NCCL (no GPUs).
 
 The critical component is the **`aws-ofi-nccl`** network plugin, which bridges NCCL to
 `libfabric` and enables RDMA on Slingshot. Without it, NCCL falls back to TCP sockets
@@ -87,7 +87,7 @@ export FI_CXI_RX_MATCH_MODE="hybrid"
 ```
 
 A downloadable copy is available at:
-`https://docs.isambard.ac.uk/user-documentation/guides/example-data/nccl/env_vars.sh`
+`https://docs.cirrus.ac.uk/user-documentation/guides/example-data/nccl/env_vars.sh`
 
 > **Application-dependent variables:** `NCCL_MIN_NCHANNELS`, `FI_CXI_DEFAULT_CQ_SIZE`,
 > and `FI_CXI_DEFAULT_TX_SIZE` may need tuning per workload. The defaults optimise for
@@ -176,6 +176,6 @@ Read this file when the user is running containerised GPU workloads across multi
 - [Official NCCL documentation](https://docs.nvidia.com/deeplearning/nccl/user-guide/docs/index.html)
 - [NCCL environment variable reference](https://docs.nvidia.com/deeplearning/nccl/user-guide/docs/env.html)
 - [aws-ofi-nccl on GitHub](https://github.com/aws/aws-ofi-nccl)
-- [Isambard MPI guide](https://docs.isambard.ac.uk/user-documentation/guides/mpi/)
-- [Isambard Containers guide](https://docs.isambard.ac.uk/user-documentation/guides/containers/)
-- [Isambard Apptainer Multi-node guide](https://docs.isambard.ac.uk/user-documentation/guides/containers/apptainer-multi-node/)
+- [Cirrus MPI guide](https://docs.cirrus.ac.uk/user-documentation/guides/mpi/)
+- [Cirrus Containers guide](https://docs.cirrus.ac.uk/user-documentation/guides/containers/)
+- [Cirrus Apptainer Multi-node guide](https://docs.cirrus.ac.uk/user-documentation/guides/containers/apptainer-multi-node/)

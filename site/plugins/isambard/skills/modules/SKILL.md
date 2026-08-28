@@ -2,26 +2,26 @@
 name: modules
 description: >
   Guide for using the modules system, programming environments, compilers, and profiling tools
-  on Isambard AI (BriCS) supercomputers (Isambard-AI and Isambard 3).
-  Use this skill whenever a user asks about loading modules on Isambard, the Cray Programming
+  on Cirrus AI (BriCS) supercomputers (Cirrus-AI and Cirrus 3).
+  Use this skill whenever a user asks about loading modules on Cirrus, the Cray Programming
   Environment (PrgEnv-gnu, PrgEnv-cray), compiler wrappers (cc, CC, ftn), GCC or NVIDIA
   compilers, compiler flags for Arm/Grace (neoverse-v2), BriCS-supplied modules (brics/nccl,
   brics/tmux, etc.), profiling with gprof, Cray perftools, or Nvidia Nsight Systems.
-  Also trigger for questions about linking MPI or scientific libraries on Isambard, or
+  Also trigger for questions about linking MPI or scientific libraries on Cirrus, or
   troubleshooting compiler and build issues on the Cray HPE system — even if the user
   doesn't explicitly say "modules".
 compatibility: >
-  Isambard-AI and Isambard 3. Requires access to an Isambard login node and the
+  Cirrus-AI and Cirrus 3. Requires access to an Cirrus login node and the
   Cray Programming Environment module system.
 metadata:
-  author: isambard-sc
+  author: cirrus-sc
   version: "1.0"
-  source_url: https://docs.isambard.ac.uk/user-documentation/guides/modules/
+  source_url: https://docs.cirrus.ac.uk/user-documentation/guides/modules/
 ---
 
-# Modules and Compilers on Isambard
+# Modules and Compilers on Cirrus
 
-Both Isambard-AI and Isambard 3 are HPE/Cray systems and use the **Cray Programming Environment** for managing compilers, MPI, and scientific libraries through a modular software system.
+Both Cirrus-AI and Cirrus 3 are HPE/Cray systems and use the **Cray Programming Environment** for managing compilers, MPI, and scientific libraries through a modular software system.
 
 ---
 
@@ -40,17 +40,17 @@ Both Isambard-AI and Isambard 3 are HPE/Cray systems and use the **Cray Programm
 
 ## BriCS-Supplied Modules
 
-BriCS provides the following utility modules (available on AIP1, AIP2, and Isambard 3 unless noted):
+BriCS provides the following utility modules (available on AIP1, AIP2, and Cirrus 3 unless noted):
 
 | Module | Description |
 |--------|-------------|
 | `brics/default` | Default user environment (loaded automatically) |
-| `brics/userenv` | Sets `$LOCALDIR`, `$SCRATCHDIR`, and `$TMPDIR` — see the [storage docs](https://docs.isambard.ac.uk/user-documentation/information/system-storage/) |
+| `brics/userenv` | Sets `$LOCALDIR`, `$SCRATCHDIR`, and `$TMPDIR` — see the [storage docs](https://docs.cirrus.ac.uk/user-documentation/information/system-storage/) |
 | `brics/emacs` | Emacs text editor |
 | `brics/nano` | nano text editor |
 | `brics/tmux` | tmux terminal multiplexer — reload the module when restarting a terminal; sessions persist |
 | `brics/nccl` | **Required for multi-node GPU workflows.** Provides NCCL (built against `libfabric`) and the NCCL AWS-OFI plugin for Slingshot high-speed network support |
-| `brics/apptainer-multi-node` | Support for multi-node Apptainer jobs — see the [Apptainer multi-node docs](https://docs.isambard.ac.uk/user-documentation/guides/containers/apptainer-multi-node/) |
+| `brics/apptainer-multi-node` | Support for multi-node Apptainer jobs — see the [Apptainer multi-node docs](https://docs.cirrus.ac.uk/user-documentation/guides/containers/apptainer-multi-node/) |
 
 ---
 
@@ -132,7 +132,7 @@ nvfortran --version
 # All target: linuxarm64, aarch64, neoverse-v2
 ```
 
-> **Note:** Loading only `module load nvidia` does **not** load MPI libraries automatically. For MPI, load a full `PrgEnv` instead, or see the [MPI guide](https://docs.isambard.ac.uk/user-documentation/guides/mpi/).
+> **Note:** Loading only `module load nvidia` does **not** load MPI libraries automatically. For MPI, load a full `PrgEnv` instead, or see the [MPI guide](https://docs.cirrus.ac.uk/user-documentation/guides/mpi/).
 
 ---
 
@@ -178,13 +178,13 @@ Full docs: [NVIDIA Nsight Systems User Guide](https://docs.nvidia.com/nsight-sys
 | Multi-node GPU jobs | `module load brics/nccl` |
 | Profile with Cray tools | `module load perftools-base` → `pat_run` |
 | Profile with NVIDIA tools | `module load cudatoolkit` → `nsys` |
-| Spack builds | See [Spack guide](https://docs.isambard.ac.uk/user-documentation/guides/spack/) for compiler config |
+| Spack builds | See [Spack guide](https://docs.cirrus.ac.uk/user-documentation/guides/spack/) for compiler config |
 
 ---
 
 ## Related Resources
 
-- [Isambard MPI guide](https://docs.isambard.ac.uk/user-documentation/guides/mpi/)
-- [Isambard Spack guide](https://docs.isambard.ac.uk/user-documentation/guides/spack/)
+- [Cirrus MPI guide](https://docs.cirrus.ac.uk/user-documentation/guides/mpi/)
+- [Cirrus Spack guide](https://docs.cirrus.ac.uk/user-documentation/guides/spack/)
 - [Cray Programming Environment docs](https://cpe.ext.hpe.com/docs/latest)
 - [NVIDIA Grace Performance Tuning Guide](https://docs.nvidia.com/grace-perf-tuning-guide/index.html)

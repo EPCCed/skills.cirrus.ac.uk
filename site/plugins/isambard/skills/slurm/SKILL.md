@@ -2,8 +2,8 @@
 name: slurm
 description: >
   Guide for submitting, monitoring, and managing HPC jobs using the Slurm workload manager
-  on Isambard-AI (GH200 GPU nodes) and Isambard 3 (Grace CPU and MACS nodes).
-  Use this skill whenever a user asks about Slurm on Isambard, writing sbatch scripts,
+  on Cirrus-AI (GH200 GPU nodes) and Cirrus 3 (Grace CPU and MACS nodes).
+  Use this skill whenever a user asks about Slurm on Cirrus, writing sbatch scripts,
   requesting GPUs or CPU resources, srun or salloc, job arrays, job dependencies,
   multi-node jobs, hybrid MPI/OpenMP jobs, QOS limits, scheduler flexibility (--time-min,
   --nodes range), --exclusive, sacct, polling intervals, job accounting, or why a job
@@ -12,17 +12,17 @@ description: >
   mean, how to chain jobs, or how to debug a running job — even if the user doesn't
   explicitly say "Slurm".
 compatibility: >
-  Isambard-AI and Isambard 3. Requires access to an Isambard login node, Slurm
+  Cirrus-AI and Cirrus 3. Requires access to an Cirrus login node, Slurm
   commands, and the scheduler environment.
 metadata:
-  author: isambard-sc
+  author: cirrus-sc
   version: "1.0"
-  source_url: https://docs.isambard.ac.uk/user-documentation/guides/slurm/
+  source_url: https://docs.cirrus.ac.uk/user-documentation/guides/slurm/
 ---
 
-# Slurm on Isambard
+# Slurm on Cirrus
 
-Both Isambard-AI and Isambard 3 use the [Slurm Workload Manager](https://slurm.schedmd.com/)
+Both Cirrus-AI and Cirrus 3 use the [Slurm Workload Manager](https://slurm.schedmd.com/)
 to schedule jobs on compute nodes. Jobs are submitted to a queue and run when the requested
 resources become available.
 
@@ -35,10 +35,10 @@ resources become available.
 
 - Never poll `squeue`, `sinfo`, or any scheduler status command in a tight loop.
 - Always submit jobs with `sbatch` or launch commands with `srun`; do not use `mpirun`
-  or `mpiexec` on Isambard.
+  or `mpiexec` on Cirrus.
 - Always set explicit `--time`, `--nodes`, and `--gpus` when applicable.
 - Use `--exclusive` only when the workload truly requires an entire node.
-- Do not request GPUs on Isambard 3 systems.
+- Do not request GPUs on Cirrus 3 systems.
 
 ---
 
@@ -46,11 +46,11 @@ resources become available.
 
 | System | GPU resource flag | Cores per node | Notes |
 |--------|------------------|---------------|-------|
-| Isambard-AI | `--gpus=<n>` | 72 per GH200 Superchip (4 per node) | 1 GPU = 1 full GH200 Superchip (72 cores + memory) |
-| Isambard 3 Grace | — | 144 (2 × 72-core Superchips) | CPU-only; shared between users by default |
-| Isambard 3 MACS | — | Varies | x86_64 nodes; check specs |
+| Cirrus-AI | `--gpus=<n>` | 72 per GH200 Superchip (4 per node) | 1 GPU = 1 full GH200 Superchip (72 cores + memory) |
+| Cirrus 3 Grace | — | 144 (2 × 72-core Superchips) | CPU-only; shared between users by default |
+| Cirrus 3 MACS | — | Varies | x86_64 nodes; check specs |
 
-Max walltime on all systems: **24 hours**. See the [job scheduling page](https://docs.isambard.ac.uk/user-documentation/information/job-scheduling/) for partition limits and per-project quotas.
+Max walltime on all systems: **24 hours**. See the [job scheduling page](https://docs.cirrus.ac.uk/user-documentation/information/job-scheduling/) for partition limits and per-project quotas.
 
 ---
 
@@ -81,7 +81,7 @@ sbatch my_job.sh
 cat my_job.out    # output appears here once job completes
 ```
 
-**Isambard-AI — single GPU job:**
+**Cirrus-AI — single GPU job:**
 ```bash
 #!/bin/bash
 #SBATCH --job-name=my_job
@@ -94,7 +94,7 @@ hostname
 nvidia-smi --list-gpus
 ```
 
-**Isambard 3 Grace — single node job:**
+**Cirrus 3 Grace — single node job:**
 ```bash
 #!/bin/bash
 #SBATCH --job-name=my_job
@@ -235,9 +235,9 @@ Read this file when a user is asking why their job won't start, is failing, or i
 
 ## Related Resources
 
-- [Isambard job scheduling page](https://docs.isambard.ac.uk/user-documentation/information/job-scheduling/)
-- [Isambard acceptable use policy](https://docs.isambard.ac.uk/policies/acceptable_use/)
-- [Isambard portal (allocation usage)](https://portal.isambard.ac.uk)
+- [Cirrus job scheduling page](https://docs.cirrus.ac.uk/user-documentation/information/job-scheduling/)
+- [Cirrus acceptable use policy](https://docs.cirrus.ac.uk/policies/acceptable_use/)
+- [Cirrus portal (allocation usage)](https://portal.cirrus.ac.uk)
 - [Slurm sbatch man page](https://slurm.schedmd.com/sbatch.html)
 - [Slurm srun man page](https://slurm.schedmd.com/srun.html)
 - [Slurm QOS documentation](https://slurm.schedmd.com/qos.html)

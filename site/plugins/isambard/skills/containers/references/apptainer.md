@@ -1,9 +1,9 @@
-# Apptainer on Isambard
+# Apptainer on Cirrus
 
-Apptainer (formerly Singularity) is available on all Isambard login and compute nodes.
+Apptainer (formerly Singularity) is available on all Cirrus login and compute nodes.
 
-> **Name note:** Isambard-AI Phase 2 has `apptainer`; Isambard 3 has `singularity`.
-> The commands are compatible — substitute `singularity` for `apptainer` on Isambard 3.
+> **Name note:** Cirrus-AI Phase 2 has `apptainer`; Cirrus 3 has `singularity`.
+> The commands are compatible — substitute `singularity` for `apptainer` on Cirrus 3.
 > See [Apptainer/Singularity compatibility docs](https://apptainer.org/docs/user/1.0/singularity_compatibility.html).
 
 Apptainer's native image format is the **SIF file** (`.sif`). SIF images are single files
@@ -92,7 +92,7 @@ See [Apptainer GPU support docs](https://apptainer.org/docs/user/1.0/gpu.html).
 
 ## Rootless Builds with `--fakeroot`
 
-User accounts on Isambard are configured for Linux user namespace mapping, allowing `--fakeroot`
+User accounts on Cirrus are configured for Linux user namespace mapping, allowing `--fakeroot`
 mode. This lets an unprivileged user act as root inside the container — required for installing
 packages during a build.
 

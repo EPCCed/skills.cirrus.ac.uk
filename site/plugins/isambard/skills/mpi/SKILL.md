@@ -1,27 +1,27 @@
 ---
 name: mpi
 description: >
-  Guide for using MPI on Isambard AI (BriCS) supercomputers (Isambard-AI and Isambard 3).
-  Use this skill whenever a user asks about MPI on Isambard, running multi-node MPI jobs,
+  Guide for using MPI on Cirrus AI (BriCS) supercomputers (Cirrus-AI and Cirrus 3).
+  Use this skill whenever a user asks about MPI on Cirrus, running multi-node MPI jobs,
   Cray MPICH, cray-mpich, PrgEnv-gnu or PrgEnv-cray for MPI, the PMI or PMIx process
   manager interface, srun --mpi flags (cray_shasta, pmi2, pmix), installing OpenMPI or
-  MPICH with conda or from source, mpi4py on Isambard, libfabric and Slingshot 11 MPI
-  performance, or why mpirun and mpiexec should not be used on Isambard.
+  MPICH with conda or from source, mpi4py on Cirrus, libfabric and Slingshot 11 MPI
+  performance, or why mpirun and mpiexec should not be used on Cirrus.
   Also trigger for questions about linking MPI libraries, compiler wrappers with MPI
   (mpicc, mpicxx, mpif90), or any multi-node communication setup on an HPE Cray system.
 compatibility: >
-  Isambard-AI and Isambard 3. Requires access to an Isambard login node and the
+  Cirrus-AI and Cirrus 3. Requires access to an Cirrus login node and the
   Cray MPI environment.
 metadata:
-  author: isambard-sc
+  author: cirrus-sc
   version: "1.0"
-  source_url: https://docs.isambard.ac.uk/user-documentation/guides/mpi/
+  source_url: https://docs.cirrus.ac.uk/user-documentation/guides/mpi/
 ---
 
-# MPI on Isambard
+# MPI on Cirrus
 
 MPI (Message Passing Interface) enables parallel communication across compute nodes. On
-Isambard-AI and Isambard 3, MPI must communicate with the **Slingshot 11 (SS11)**
+Cirrus-AI and Cirrus 3, MPI must communicate with the **Slingshot 11 (SS11)**
 high-speed interconnect via `libfabric` to achieve optimal latency and bandwidth.
 
 ```
@@ -34,8 +34,8 @@ MPI application → libfabric → Slingshot 11 NIC → network
 
 ## Critical Rules
 
-- Always start MPI jobs with `srun` on Isambard.
-- Never use `mpirun` or `mpiexec` on Isambard.
+- Always start MPI jobs with `srun` on Cirrus.
+- Never use `mpirun` or `mpiexec` on Cirrus.
 - Always choose the `--mpi` value that matches the MPI implementation in use.
 - Load MPI through a Cray `PrgEnv` or a Conda/MPI build that is explicitly configured
   for Slingshot 11.
@@ -70,7 +70,7 @@ The `-lmpi_gnu_*` or `-lmpi_cray` library is the Cray MPICH build tuned for Slin
 
 > **aarch64 known issues:** Cray MPICH support for aarch64 was recently added and some
 > environment variable workarounds may be needed. Check the
-> [Known Issues page](https://docs.isambard.ac.uk/service-status/known_issues/) for
+> [Known Issues page](https://docs.cirrus.ac.uk/service-status/known_issues/) for
 > current advice before running.
 
 ---
@@ -121,7 +121,7 @@ The system Cray MPICH is recommended for performance. If you need a different ve
 
 ### Option 1: Conda (easiest)
 
-See the [Python/Conda guide](https://docs.isambard.ac.uk/user-documentation/guides/python/)
+See the [Python/Conda guide](https://docs.cirrus.ac.uk/user-documentation/guides/python/)
 to set up Miniforge first, then:
 
 ```bash
@@ -145,7 +145,7 @@ For maximum control or when Slingshot integration is needed with OpenMPI:
 
 ### mpi4py
 
-For Python MPI, see the [Python guide](https://docs.isambard.ac.uk/user-documentation/guides/python/)
+For Python MPI, see the [Python guide](https://docs.cirrus.ac.uk/user-documentation/guides/python/)
 — specifically the section on building `mpi4py` from source against the Cray MPI stack
 using `module load PrgEnv-gnu` and `pip install --no-binary mpi4py mpi4py`.
 
@@ -171,9 +171,9 @@ using `module load PrgEnv-gnu` and `pip install --no-binary mpi4py mpi4py`.
 
 ## Related Resources
 
-- [Isambard Known Issues](https://docs.isambard.ac.uk/service-status/known_issues/) — check for current Cray MPICH aarch64 workarounds
-- [Isambard Modules and Compilers guide](https://docs.isambard.ac.uk/user-documentation/guides/modules/)
-- [Isambard NCCL guide](https://docs.isambard.ac.uk/user-documentation/guides/nccl/)
-- [Isambard Containers guide](https://docs.isambard.ac.uk/user-documentation/guides/containers/)
+- [Cirrus Known Issues](https://docs.cirrus.ac.uk/service-status/known_issues/) — check for current Cray MPICH aarch64 workarounds
+- [Cirrus Modules and Compilers guide](https://docs.cirrus.ac.uk/user-documentation/guides/modules/)
+- [Cirrus NCCL guide](https://docs.cirrus.ac.uk/user-documentation/guides/nccl/)
+- [Cirrus Containers guide](https://docs.cirrus.ac.uk/user-documentation/guides/containers/)
 - [Cray Programming Environment docs](https://cpe.ext.hpe.com/docs/latest)
 - [Argonne PMI2 paper](https://www.mcs.anl.gov/papers/P1760.pdf)

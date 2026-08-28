@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Isambard AI Skills</title>
+  <title>Cirrus AI Skills</title>
   <style>
     :root {
       --primary: #1a3a6b;
@@ -102,9 +102,9 @@
 <body>
 
 <header>
-  <h1>Isambard AI Skills</h1>
+  <h1>Cirrus AI Skills</h1>
   <p>
-    A curated collection of agent skills for working with Isambard HPC
+    A curated collection of agent skills for working with Cirrus HPC
     systems — designed for use with Claude Code and other AI coding tools.
   </p>
 </header>
@@ -122,14 +122,14 @@
       scripts, and run commands correctly for that environment.
     </p>
     <p>
-      Skills hosted here cover Isambard-specific workflows such as submitting
+      Skills hosted here cover Cirrus-specific workflows such as submitting
       and managing HPC jobs. Each skill is a single file served directly from
       this site so that the URLs remain stable regardless of where the
       underlying repository is hosted.
     </p>
     <div class="note">
-      For full Isambard documentation visit
-      <a href="https://docs.isambard.ac.uk" target="_blank">docs.isambard.ac.uk</a>.
+      For full Cirrus documentation visit
+      <a href="https://docs.cirrus.ac.uk" target="_blank">docs.cirrus.ac.uk</a>.
     </div>
   </section>
 
@@ -140,108 +140,108 @@
       <div class="skill-card">
         <h3>Containers</h3>
         <p>
-          Run containers on Isambard using Podman-HPC and Apptainer. Covers
+          Run containers on Cirrus using Podman-HPC and Apptainer. Covers
           image management, GPU access, and multi-node MPI/NCCL workloads over
           Slingshot 11.
         </p>
-        <a href="plugins/isambard/skills/containers/SKILL.md">View skill file &rarr;</a>
+        <a href="plugins/cirrus/skills/containers/SKILL.md">View skill file &rarr;</a>
       </div>
 
       <div class="skill-card">
         <h3>GPUs and CUDA</h3>
         <p>
-          Use GPUs and CUDA on Isambard-AI (NVIDIA GH200, sm_90). Covers
+          Use GPUs and CUDA on Cirrus-AI (NVIDIA GH200, sm_90). Covers
           loading cudatoolkit/nvhpc modules, compiling with nvcc, and CUDA
           forward compatibility.
         </p>
-        <a href="plugins/isambard/skills/cuda/SKILL.md">View skill file &rarr;</a>
+        <a href="plugins/cirrus/skills/cuda/SKILL.md">View skill file &rarr;</a>
       </div>
 
       <div class="skill-card">
         <h3>MPI</h3>
         <p>
-          Use MPI on Isambard with Cray MPICH or OpenMPI. Covers PMI types,
+          Use MPI on Cirrus with Cray MPICH or OpenMPI. Covers PMI types,
           srun --mpi flags, Slingshot 11 performance, and why mpirun/mpiexec
           must not be used.
         </p>
-        <a href="plugins/isambard/skills/mpi/SKILL.md">View skill file &rarr;</a>
+        <a href="plugins/cirrus/skills/mpi/SKILL.md">View skill file &rarr;</a>
       </div>
 
       <div class="skill-card">
         <h3>NCCL</h3>
         <p>
-          Use NCCL for multi-node GPU communication on Isambard-AI over
+          Use NCCL for multi-node GPU communication on Cirrus-AI over
           Slingshot 11. Covers the brics/nccl module, aws-ofi-nccl plugin, and
           NCCL in containers.
         </p>
-        <a href="plugins/isambard/skills/nccl/SKILL.md">View skill file &rarr;</a>
+        <a href="plugins/cirrus/skills/nccl/SKILL.md">View skill file &rarr;</a>
       </div>
 
       <div class="skill-card">
         <h3>Modules</h3>
         <p>
           Use the modules system, Cray Programming Environments, compiler
-          wrappers, and profiling tools on Isambard.
+          wrappers, and profiling tools on Cirrus.
         </p>
-        <a href="plugins/isambard/skills/modules/SKILL.md">View skill file &rarr;</a>
+        <a href="plugins/cirrus/skills/modules/SKILL.md">View skill file &rarr;</a>
       </div>
 
       <div class="skill-card">
         <h3>Python</h3>
         <p>
-          Install and manage Python environments on Isambard using Conda
+          Install and manage Python environments on Cirrus using Conda
           (Miniforge), uv, or Cray Python. Covers aarch64 package builds and
           mpi4py.
         </p>
-        <a href="plugins/isambard/skills/python/SKILL.md">View skill file &rarr;</a>
+        <a href="plugins/cirrus/skills/python/SKILL.md">View skill file &rarr;</a>
       </div>
 
       <div class="skill-card">
         <h3>Slurm</h3>
         <p>
           Submit, monitor, and manage HPC jobs using the Slurm workload
-          manager on Isambard systems. Covers job scripts, resource
+          manager on Cirrus systems. Covers job scripts, resource
           allocation, monitoring, and safe polling intervals.
         </p>
-        <a href="plugins/isambard/skills/slurm/SKILL.md">View skill file &rarr;</a>
+        <a href="plugins/cirrus/skills/slurm/SKILL.md">View skill file &rarr;</a>
       </div>
 
       <div class="skill-card">
         <h3>Spack</h3>
         <p>
-          Install, configure, and use Spack to build HPC software on Isambard.
+          Install, configure, and use Spack to build HPC software on Cirrus.
           Covers the buildit config repository, environments, concretizing,
           installing, and aarch64 target builds.
         </p>
-        <a href="plugins/isambard/skills/spack/SKILL.md">View skill file &rarr;</a>
+        <a href="plugins/cirrus/skills/spack/SKILL.md">View skill file &rarr;</a>
       </div>
 
       </div>
     </section>
     <p>
-      Add the Isambard marketplace so Claude Code can browse and install
+      Add the Cirrus marketplace so Claude Code can browse and install
       all available skills:
     </p>
-    <pre><code>/plugin marketplace add https://skills.isambard.ac.uk/.claude-plugin/marketplace.json</code></pre>
+    <pre><code>/plugin marketplace add https://skills.cirrus.ac.uk/.claude-plugin/marketplace.json</code></pre>
     <p>
       Then install a specific skill by name:
     </p>
-    <pre><code>/plugin install slurm@isambard-skills</code></pre>
+    <pre><code>/plugin install slurm@cirrus-skills</code></pre>
     <p>
       Or enable a skill automatically for a project by adding this to
       your project's <code>.claude/settings.json</code>:
     </p>
     <pre><code>{
   "extraKnownMarketplaces": {
-    "isambard-skills": {
+    "cirrus-skills": {
       "source": {
         "source": "url",
-        "url": "https://skills.isambard.ac.uk/.claude-plugin/marketplace.json"
+        "url": "https://skills.cirrus.ac.uk/.claude-plugin/marketplace.json"
       }
     }
   },
   "enabledskills": {
-    "slurm@isambard-skills": true
+    "slurm@cirrus-skills": true
   }
 }</code></pre>
 
@@ -254,22 +254,22 @@
     <p>
       Skill URLs follow the pattern:
     </p>
-    <pre><code>https://skills.isambard.ac.uk/plugins/isambard/skills/&lt;name&gt;/SKILL.md</code></pre>
+    <pre><code>https://skills.cirrus.ac.uk/plugins/cirrus/skills/&lt;name&gt;/SKILL.md</code></pre>
 
     <div class="note">
       More information on using skills with specific tools can be found in
       the
-      <a href="https://docs.isambard.ac.uk" target="_blank">Isambard documentation</a>.
+      <a href="https://docs.cirrus.ac.uk" target="_blank">Cirrus documentation</a>.
     </div>
   </section>
 
 </main>
 
 <footer>
-  &copy; Isambard SC &mdash;
-  <a href="https://github.com/isambard-sc/skills.isambard.ac.uk"
+  &copy; Cirrus SC &mdash;
+  <a href="https://github.com/cirrus-sc/skills.cirrus.ac.uk"
      target="_blank">View on GitHub</a> &mdash;
-  <a href="https://docs.isambard.ac.uk" target="_blank">Full documentation</a>
+  <a href="https://docs.cirrus.ac.uk" target="_blank">Full documentation</a>
 </footer>
 
 </body>

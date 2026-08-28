@@ -1,4 +1,4 @@
-# Podman-HPC on Isambard
+# Podman-HPC on Cirrus
 
 Podman-HPC (`podman-hpc`) is a wrapper around Podman providing HPC-specific configuration.
 It exposes all standard Podman subcommands plus HPC-specific ones.

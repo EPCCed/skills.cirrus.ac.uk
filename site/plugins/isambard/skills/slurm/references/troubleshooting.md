@@ -17,20 +17,20 @@ job finishes.
 
 - Wait for running jobs to complete, then resubmit.
 - Set `--time` as close to the expected runtime as possible.
-- Check your project's allocation at the [portal](https://portal.isambard.ac.uk).
+- Check your project's allocation at the [portal](https://portal.cirrus.ac.uk).
 - See also: `AssocGrpGRESMinutesLimit` in the PENDING section below.
 
 **`error: Invalid generic resource (GRES) specification`**
 
-The `--gpus` or `--gres` value is not valid for the partition. On Isambard-AI, request GPUs
-with `--gpus=<n>`. Check the [basics guide](https://docs.isambard.ac.uk/user-documentation/guides/slurm/)
+The `--gpus` or `--gres` value is not valid for the partition. On Cirrus-AI, request GPUs
+with `--gpus=<n>`. Check the [basics guide](https://docs.cirrus.ac.uk/user-documentation/guides/slurm/)
 for the correct syntax per system.
 
 **`Batch job submission failed: Requested node configuration is not available`**
 
 The combination of resources requested does not match anything available. Check the
-[system specifications](https://docs.isambard.ac.uk/specs/) and
-[job scheduling page](https://docs.isambard.ac.uk/user-documentation/information/job-scheduling/)
+[system specifications](https://docs.cirrus.ac.uk/specs/) and
+[job scheduling page](https://docs.cirrus.ac.uk/user-documentation/information/job-scheduling/)
 for valid directives on your target system.
 
 **`error: Invalid account or account/partition combination specified`**
@@ -79,7 +79,7 @@ workload into smaller chunks chained with `--dependency=afterok`.
 
 Job was killed by the out-of-memory manager. Options:
 - Reduce the memory footprint of your application.
-- Request more resources. On Isambard-AI, each additional GPU also allocates an additional
+- Request more resources. On Cirrus-AI, each additional GPU also allocates an additional
   Superchip's worth of CPU memory.
 
 **`NODE_FAIL`**

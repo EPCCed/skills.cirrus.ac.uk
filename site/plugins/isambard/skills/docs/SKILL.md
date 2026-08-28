@@ -2,20 +2,20 @@
 name: brics-hpc-ai-code
 description: >
   Guidance for writing, reviewing, and running AI-generated code responsibly on
-  Bristol Centre for Supercomputing (BriCS) shared HPC resources: Isambard-AI
-  and Isambard 3. Use this skill whenever generating, adapting, or debugging
+  Bristol Centre for Supercomputing (BriCS) shared HPC resources: Cirrus-AI
+  and Cirrus 3. Use this skill whenever generating, adapting, or debugging
   code intended to run on BriCS facilities, writing Slurm job scripts, managing
   storage, installing software, or ensuring compliance with BriCS policies.
-license: Proprietary. See https://docs.isambard.ac.uk/policies/ for terms.
+license: Proprietary. See https://docs.cirrus.ac.uk/policies/ for terms.
 compatibility: >
-  Designed for use with BriCS facilities (Isambard-AI Phase 1/2, Isambard 3
-  Grace/MACS). Assumes Linux aarch64 (Arm64) on Isambard-AI and Isambard 3
-  Grace; x86_64 on Isambard 3 MACS. Requires Slurm, SSH/Clifton access.
+  Designed for use with BriCS facilities (Cirrus-AI Phase 1/2, Cirrus 3
+  Grace/MACS). Assumes Linux aarch64 (Arm64) on Cirrus-AI and Cirrus 3
+  Grace; x86_64 on Cirrus 3 MACS. Requires Slurm, SSH/Clifton access.
 metadata:
   author: Bristol Centre for Supercomputing (BriCS)
-  docs: https://docs.isambard.ac.uk/
-  support: https://support.isambard.ac.uk
-  status: https://status.isambard.ac.uk
+  docs: https://docs.cirrus.ac.uk/
+  support: https://support.cirrus.ac.uk
+  status: https://status.cirrus.ac.uk
 ---
 
 # BriCS HPC Responsible AI-Generated Code Skill
@@ -35,7 +35,7 @@ Always follow these rules when generating or suggesting code for BriCS systems.
 | **Accurate resource requests** | Always estimate realistic `--time`, `--gpus`, `--ntasks` in job scripts |
 | **Storage awareness** | Use the correct storage area; never assume data persists after project end |
 | **Policy compliance** | All generated code must be consistent with the BriCS Acceptable Use Policy |
-| **Architecture awareness** | Isambard-AI and Isambard 3 Grace are **aarch64 (Arm64)**; MACS has mixed archs |
+| **Architecture awareness** | Cirrus-AI and Cirrus 3 Grace are **aarch64 (Arm64)**; MACS has mixed archs |
 | **Verify before submit** | Always review AI-generated scripts before `sbatch`—especially resource flags |
 
 ---
@@ -49,7 +49,7 @@ Always follow these rules when generating or suggesting code for BriCS systems.
 | Install Python packages | Conda (Miniforge) or `uv`; never `pip install --user` in $HOME |
 | Share data with project members | Write to `$PROJECTDIR` |
 | Share data with all users | Write to `$PROJECTDIR_PUBLIC` |
-| Temporary/intermediate data | Use `$SCRATCHDIR` (auto-deleted after 60 days on Isambard 3) |
+| Temporary/intermediate data | Use `$SCRATCHDIR` (auto-deleted after 60 days on Cirrus 3) |
 | Fast in-job scratch | Use `$LOCALDIR` (wiped at job end) |
 | Long job (>24h) | Break into chained jobs with `--dependency=afterok:<JOBID>` |
 | Check quota | `lfs quota -hp $(lfs project -d $SCRATCHDIR \| awk '{print $1}') $SCRATCHDIR` |
@@ -58,7 +58,7 @@ Always follow these rules when generating or suggesting code for BriCS systems.
 
 ## Slurm Job Scripts
 
-### Isambard-AI (GPU — GH200)
+### Cirrus-AI (GPU — GH200)
 
 Each GPU requested allocates **1 Grace Hopper Superchip** = 1 GH200 GPU + 72 CPU cores + 115 GiB RAM.
 
@@ -73,13 +73,13 @@ module load cray-python         # Or activate your Conda/venv environment
 python3 my_script.py
 ```
 
-**Gotchas for Isambard-AI:**
+**Gotchas for Cirrus-AI:**
 - You MUST specify `--gpus` (or `--gpus-per-*`). Jobs without GPU directives will fail.
 - The default partition is `workq`. Do not specify a partition unless you have a reason.
 - Maximum walltime is **24 hours**. For longer jobs, use `--dependency=afterok:<JOBID>`.
 - Project GPU limit: **32 GPUs** across all running jobs (`32gpu_qos`).
 
-### Isambard 3 (CPU — Grace)
+### Cirrus 3 (CPU — Grace)
 
 ```bash
 #!/bin/bash
@@ -115,7 +115,7 @@ JOBID_2=$(sbatch --parsable --dependency=afterok:${JOBID_1} job_part2.sh)
 
 All storage is **working storage — not backed up**. Data is deleted at project end.
 
-| Variable | Path | Purpose | Quota (Isambard-AI) | Retention |
+| Variable | Path | Purpose | Quota (Cirrus-AI) | Retention |
 |---|---|---|---|---|
 | `$HOME` | `/home/<PROJECT>/<USER>.<PROJECT>` | Config files, scripts, job outputs | 100 GiB | Project end |
 | `$SCRATCHDIR` | `/scratch/<PROJECT>/<USER>.<PROJECT>` | Intermediate job data, containers | 5 TiB | 60 days (i3) / Project end (iAI) |
@@ -186,8 +186,8 @@ conda install
 **Gotchas:**
 - Do NOT run `conda init` — it modifies shell startup scripts and causes problems.
 - Do NOT install packages in the base Conda environment.
-- Do NOT use `pip install --user`; it installs into `$HOME/.local` which is shared across architectures (aarch64 and x86_64 on Isambard 3) — use venvs instead.
-- Isambard-AI and Isambard 3 Grace are **aarch64**. Many PyPI wheels do not support aarch64; use conda-forge or build from source.
+- Do NOT use `pip install --user`; it installs into `$HOME/.local` which is shared across architectures (aarch64 and x86_64 on Cirrus 3) — use venvs instead.
+- Cirrus-AI and Cirrus 3 Grace are **aarch64**. Many PyPI wheels do not support aarch64; use conda-forge or build from source.
 
 ### Architecture check in scripts
 
@@ -213,7 +213,7 @@ module load cray-python   # Load Cray Python (pre-installed)
 
 ```bash
 # Install Clifton (Linux)
-curl -L https://github.com/isambard-sc/clifton/releases/latest/download/clifton-linux-musl-x86_64 -o clifton
+curl -L https://github.com/cirrus-sc/clifton/releases/latest/download/clifton-linux-musl-x86_64 -o clifton
 chmod u+x clifton && mv clifton ~/.local/bin/
 
 # Authenticate (required daily)
@@ -223,8 +223,8 @@ clifton auth
 clifton ssh-config write
 
 # Connect
-ssh .aip2.isambard    # Isambard-AI Phase 2
-ssh .3.isambard       # Isambard 3
+ssh .aip2.cirrus    # Cirrus-AI Phase 2
+ssh .3.cirrus       # Cirrus 3
 ```
 
 **Gotchas:**
@@ -257,7 +257,7 @@ Before submitting any AI-generated code or job script to BriCS:
 - [ ] **Resource requests are realistic** — `--time`, `--gpus`, `--ntasks` match your actual workload
 - [ ] **No heavy computation on the login node** — all intensive work is inside a job script
 - [ ] **Correct storage variable used** — large inputs/outputs go to `$SCRATCHDIR` or `$PROJECTDIR`, not `$HOME`
-- [ ] **Architecture is correct** — code compiles/runs on aarch64 if targeting Isambard-AI or Isambard 3 Grace
+- [ ] **Architecture is correct** — code compiles/runs on aarch64 if targeting Cirrus-AI or Cirrus 3 Grace
 - [ ] **Python packages are in a virtual environment** — not installed globally or with `--user`
 - [ ] **No persistent sessions** — `tmux`/`screen` used only within a job, not left on login nodes
 - [ ] **Quota checked** — storage usage is within limits before staging large datasets
@@ -271,28 +271,28 @@ Before submitting any AI-generated code or job script to BriCS:
 
 | Mistake | Consequence | Fix |
 |---|---|---|
-| No `--gpus` on Isambard-AI | Job fails | Always include `--gpus=1` (or more) |
+| No `--gpus` on Cirrus-AI | Job fails | Always include `--gpus=1` (or more) |
 | Running compute on login node | Account suspension | Use `sbatch`/`srun` |
 | `pip install --user` across archs | Package conflicts | Use Conda env or venv |
 | `conda init` in `.bashrc` | Shell startup failures | Use `source ~/miniforge3/bin/activate` |
-| Leaving data in `$SCRATCHDIR` for >60 days (Isambard 3) | Data deleted | Move to `$PROJECTDIR` or back up |
+| Leaving data in `$SCRATCHDIR` for >60 days (Cirrus 3) | Data deleted | Move to `$PROJECTDIR` or back up |
 | Persistent `tmux` on login node | Session terminated | Submit long jobs via Slurm |
 | Using `watch` with any Slurm command | Disrupts scheduler for all users; AUP violation | Never combine `watch` with `squeue`, `sinfo`, `sacct`, or similar — check once manually |
 | Using `/tmp` directly in scripts | `/tmp` is node-local, not guaranteed to exist, and not cleaned up reliably | Use `$SCRATCHDIR`, `$LOCALDIR`, or a subdirectory of a known env variable |
 | Leaving temp files in `$SCRATCHDIR` or `$LOCALDIR` after a job | Wastes quota; may cause future jobs to fail on space | Explicitly delete temp files at the end of your job script |
-| Raising a support ticket for a known outage | Unnecessary load on the helpdesk | Always check https://status.isambard.ac.uk before submitting a ticket |
+| Raising a support ticket for a known outage | Unnecessary load on the helpdesk | Always check https://status.cirrus.ac.uk before submitting a ticket |
 | Forgetting `clifton auth` | SSH fails | Run daily before connecting |
 
 ---
 
 ## Further Reading
 
-- Full documentation: https://docs.isambard.ac.uk/
-- Slurm job management: https://docs.isambard.ac.uk/user-documentation/guides/slurm/
-- Storage spaces: https://docs.isambard.ac.uk/user-documentation/information/system-storage/
-- Job scheduling & limits: https://docs.isambard.ac.uk/user-documentation/information/job-scheduling/
-- Python guide: https://docs.isambard.ac.uk/user-documentation/guides/python/
-- Login guide: https://docs.isambard.ac.uk/user-documentation/guides/login/
-- Policies: https://docs.isambard.ac.uk/policies/
-- Support: https://support.isambard.ac.uk
-- Service status: https://status.isambard.ac.uk
+- Full documentation: https://docs.cirrus.ac.uk/
+- Slurm job management: https://docs.cirrus.ac.uk/user-documentation/guides/slurm/
+- Storage spaces: https://docs.cirrus.ac.uk/user-documentation/information/system-storage/
+- Job scheduling & limits: https://docs.cirrus.ac.uk/user-documentation/information/job-scheduling/
+- Python guide: https://docs.cirrus.ac.uk/user-documentation/guides/python/
+- Login guide: https://docs.cirrus.ac.uk/user-documentation/guides/login/
+- Policies: https://docs.cirrus.ac.uk/policies/
+- Support: https://support.cirrus.ac.uk
+- Service status: https://status.cirrus.ac.uk

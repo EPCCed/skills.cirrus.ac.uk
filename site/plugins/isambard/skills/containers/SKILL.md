@@ -1,43 +1,43 @@
 ---
 name: containers
 description: >
-  Guide for using containers on Isambard AI (BriCS) supercomputers with Podman-HPC and
+  Guide for using containers on Cirrus AI (BriCS) supercomputers with Podman-HPC and
   Apptainer (formerly Singularity). Use this skill whenever a user asks about running
-  containers on Isambard, using podman-hpc or apptainer/singularity, pulling or building
+  containers on Cirrus, using podman-hpc or apptainer/singularity, pulling or building
   container images, running containers on compute nodes or across multiple nodes with MPI
   or NCCL, GPU access inside containers, squashfs image migration, the brics/nccl or
-  brics/apptainer-multi-node modules, using NGC (Nvidia GPU Cloud) containers on Isambard,
+  brics/apptainer-multi-node modules, using NGC (Nvidia GPU Cloud) containers on Cirrus,
   or getting full Slingshot 11 interconnect bandwidth from containerised workloads.
   Also trigger for questions about aarch64-compatible container images, --fakeroot builds,
   the /host/adapt.sh entrypoint, or any container-related workflow on an HPE Cray system.
 compatibility: >
-  Isambard-AI and Isambard 3. Requires access to an Isambard login node and the
+  Cirrus-AI and Cirrus 3. Requires access to an Cirrus login node and the
   Podman-HPC or Apptainer runtime.
 metadata:
-  author: isambard-sc
+  author: cirrus-sc
   version: "1.0"
-  source_url: https://docs.isambard.ac.uk/user-documentation/guides/containers/
+  source_url: https://docs.cirrus.ac.uk/user-documentation/guides/containers/
 ---
 
-# Containers on Isambard
+# Containers on Cirrus
 
-Two container engines are available on Isambard-AI and Isambard 3:
+Two container engines are available on Cirrus-AI and Cirrus 3:
 
 | Engine | Command | Best for |
 |--------|---------|----------|
 | **Podman-HPC** | `podman-hpc` | OCI/Docker-style workflows; building custom images on-system |
-| **Apptainer** | `apptainer` (AIP2) / `singularity` (Isambard 3) | SIF-based HPC workflows; rootless builds from definition files |
+| **Apptainer** | `apptainer` (AIP2) / `singularity` (Cirrus 3) | SIF-based HPC workflows; rootless builds from definition files |
 
 Both engines support single-node and multi-node operation. Multi-node jobs require extra setup to use the **Slingshot 11** high-speed interconnect — skip this at the cost of severely degraded bandwidth.
 
-> **aarch64 images only.** Isambard uses Arm64 (`aarch64`). Only images built for this architecture
+> **aarch64 images only.** Cirrus uses Arm64 (`aarch64`). Only images built for this architecture
 > will run. When browsing registries like [NGC](https://catalog.ngc.nvidia.com/orgs/nvidia/containers/pytorch/tags),
 > filter tags by `linux/arm64` before pulling.
 
 ## Critical Rules
 
-- Only use container images built for `linux/arm64` on Isambard.
-- Never run x86 or `amd64` images on Isambard compute nodes.
+- Only use container images built for `linux/arm64` on Cirrus.
+- Never run x86 or `amd64` images on Cirrus compute nodes.
 - Multi-node container jobs must use the host MPI/NCCL libraries and `/host/adapt.sh`.
 - Use `--nv` for GPU containers in Apptainer and `--device=nvidia.com/gpu=all` or
   `--gpu` for Podman-HPC.
@@ -67,7 +67,7 @@ Choose **Podman-HPC** if you:
 Choose **Apptainer** if you:
 - Already use Singularity/Apptainer workflows
 - Need to build custom images from definition files with root-like privileges (`--fakeroot`)
-- Are on Isambard 3 (where `singularity` is the installed command)
+- Are on Cirrus 3 (where `singularity` is the installed command)
 
 ---
 
@@ -115,9 +115,9 @@ Read this file when helping with any Apptainer/Singularity task.
 
 ## Related Resources
 
-- [Isambard MPI guide](https://docs.isambard.ac.uk/user-documentation/guides/mpi/)
-- [Isambard NCCL guide](https://docs.isambard.ac.uk/user-documentation/guides/nccl/)
-- [System storage docs](https://docs.isambard.ac.uk/user-documentation/information/system-storage/)
+- [Cirrus MPI guide](https://docs.cirrus.ac.uk/user-documentation/guides/mpi/)
+- [Cirrus NCCL guide](https://docs.cirrus.ac.uk/user-documentation/guides/nccl/)
+- [System storage docs](https://docs.cirrus.ac.uk/user-documentation/information/system-storage/)
 - [NGC container registry](https://catalog.ngc.nvidia.com/containers)
 - [NERSC Podman-HPC tutorial](https://docs.nersc.gov/development/containers/podman-hpc/podman-beginner-tutorial/)
 - [Apptainer documentation](https://apptainer.org/docs/user/main/)

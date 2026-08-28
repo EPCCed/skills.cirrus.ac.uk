@@ -1,5 +1,5 @@
 {
-  "name": "isambard",
-  "description": "AI agent skills for Isambard HPC systems",
+  "name": "cirrus",
+  "description": "AI agent skills for Cirrus HPC systems",
   "version": "1.0.0"
 }

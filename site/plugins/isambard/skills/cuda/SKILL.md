@@ -1,32 +1,32 @@
 ---
 name: cuda
 description: >
-  Guide for using GPUs and CUDA on Isambard AI (BriCS) supercomputers (Isambard-AI Phase 1
+  Guide for using GPUs and CUDA on Cirrus AI (BriCS) supercomputers (Cirrus-AI Phase 1
   and Phase 2, which have NVIDIA GH200 Grace Hopper GPUs). Use this skill whenever a user
-  asks about CUDA on Isambard, loading the cudatoolkit or nvhpc modules, compiling CUDA
+  asks about CUDA on Cirrus, loading the cudatoolkit or nvhpc modules, compiling CUDA
   kernels with nvcc, the correct -arch flag for the GH200 (sm_90), CUDA forward
   compatibility, using a newer CUDA version than the installed driver supports, the NVIDIA
-  HPC SDK on Isambard, NGC container images for GPU workloads, nvidia-smi on compute nodes,
+  HPC SDK on Cirrus, NGC container images for GPU workloads, nvidia-smi on compute nodes,
   or diagnosing CUDA version mismatches. Also trigger for general GPU programming setup
-  questions on Isambard, even if the user doesn't say "CUDA" explicitly.
-  Note: GPUs are only on Isambard-AI (Phase 1 and Phase 2) — not Isambard 3.
+  questions on Cirrus, even if the user doesn't say "CUDA" explicitly.
+  Note: GPUs are only on Cirrus-AI (Phase 1 and Phase 2) — not Cirrus 3.
 compatibility: >
-  Isambard-AI only. Requires access to an Isambard-AI login node, GPU compute
+  Cirrus-AI only. Requires access to an Cirrus-AI login node, GPU compute
   resources, and CUDA toolkit or container runtime support.
 metadata:
-  author: isambard-sc
+  author: cirrus-sc
   version: "1.0"
-  source_url: https://docs.isambard.ac.uk/user-documentation/guides/gpus_and_cuda/
+  source_url: https://docs.cirrus.ac.uk/user-documentation/guides/gpus_and_cuda/
 ---
 
-# GPUs and CUDA on Isambard
+# GPUs and CUDA on Cirrus
 
-Isambard-AI compute nodes are equipped with **NVIDIA GH200 120GB Grace Hopper** GPUs
+Cirrus-AI compute nodes are equipped with **NVIDIA GH200 120GB Grace Hopper** GPUs
 (compute capability **sm_90**, Hopper architecture). CUDA is the foundation for all GPU
 workloads — frameworks like PyTorch depend on it, and every library and tool links against
 a specific CUDA toolkit version.
 
-> **GPU systems only:** Isambard-AI Phase 1 and Phase 2. Isambard 3 has no GPUs.
+> **GPU systems only:** Cirrus-AI Phase 1 and Phase 2. Cirrus 3 has no GPUs.
 
 ---
 
@@ -55,7 +55,7 @@ below to run applications requiring a newer CUDA than the driver natively suppor
 
 **Applications that bundle their own CUDA runtime** (e.g. PyTorch installed via conda or
 NGC containers) work without any additional module loading. See the
-[Distributed PyTorch Training tutorial](https://docs.isambard.ac.uk/user-documentation/tutorials/distributed-training/)
+[Distributed PyTorch Training tutorial](https://docs.cirrus.ac.uk/user-documentation/tutorials/distributed-training/)
 for an example.
 
 **Applications that require the system CUDA toolkit** (compiling CUDA code, using NVIDIA
@@ -163,7 +163,7 @@ Key NGC base images (use `linux/arm64` / `aarch64` tags):
 | `nvcr.io/nvidia/pytorch:<tag>-py3` | PyTorch, CUDA, cuDNN, NCCL, APEX | Deep learning training/inference |
 
 Check [NGC Catalog](https://catalog.ngc.nvidia.com/) for latest tags.
-See the [containers guide](https://docs.isambard.ac.uk/user-documentation/guides/containers/)
+See the [containers guide](https://docs.cirrus.ac.uk/user-documentation/guides/containers/)
 for aarch64 image selection and multi-node setup.
 
 ### Option 2: NVIDIA HPC SDK (bare-metal install)
@@ -263,7 +263,7 @@ CUDA path. Re-export `LD_LIBRARY_PATH` with the compat entry at the front.
 - [NVIDIA HPC SDK documentation](https://docs.nvidia.com/hpc-sdk/)
 - [NGC Catalog](https://catalog.ngc.nvidia.com/)
 - [CUDA Forward Compatibility docs](https://docs.nvidia.com/deploy/cuda-compatibility/)
-- [Isambard Containers guide](https://docs.isambard.ac.uk/user-documentation/guides/containers/)
-- [Isambard NCCL guide](https://docs.isambard.ac.uk/user-documentation/guides/nccl/)
-- [Isambard Modules and Compilers guide](https://docs.isambard.ac.uk/user-documentation/guides/modules/)
-- [Distributed PyTorch Training tutorial](https://docs.isambard.ac.uk/user-documentation/tutorials/distributed-training/)
+- [Cirrus Containers guide](https://docs.cirrus.ac.uk/user-documentation/guides/containers/)
+- [Cirrus NCCL guide](https://docs.cirrus.ac.uk/user-documentation/guides/nccl/)
+- [Cirrus Modules and Compilers guide](https://docs.cirrus.ac.uk/user-documentation/guides/modules/)
+- [Distributed PyTorch Training tutorial](https://docs.cirrus.ac.uk/user-documentation/tutorials/distributed-training/)

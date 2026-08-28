@@ -1,4 +1,4 @@
-# NCCL in Containers on Isambard
+# NCCL in Containers on Cirrus
 
 Two approaches, depending on whether your container's CUDA runtime matches the host.
 
@@ -13,7 +13,7 @@ module, which injects the host NCCL and `aws-ofi-nccl` into the container automa
 module load brics/apptainer-multi-node
 ```
 
-Then follow the [Apptainer Multi-node guide](https://docs.isambard.ac.uk/user-documentation/guides/containers/apptainer-multi-node/)
+Then follow the [Apptainer Multi-node guide](https://docs.cirrus.ac.uk/user-documentation/guides/containers/apptainer-multi-node/)
 to run `nccl-tests`. No custom NCCL build required.
 
 ---
@@ -30,10 +30,10 @@ are not baked into the image.
 ### Step 1: Create the Apptainer definition file
 
 Download template:
-`https://docs.isambard.ac.uk/user-documentation/guides/example-data/apptainer/pytorch_multinode.def`
+`https://docs.cirrus.ac.uk/user-documentation/guides/example-data/apptainer/pytorch_multinode.def`
 
 Also download the env vars script and place it alongside the `.def` file:
-`https://docs.isambard.ac.uk/user-documentation/guides/example-data/nccl/env_vars.sh`
+`https://docs.cirrus.ac.uk/user-documentation/guides/example-data/nccl/env_vars.sh`
 
 The definition file (based on NGC PyTorch 26.01) does the following:
 - Copies `env_vars.sh` into `/opt/` inside the container
@@ -62,7 +62,7 @@ srun --gpus=1 --time=00:30:00 \
 ### Step 3: Build NCCL and `aws-ofi-nccl` inside the container
 
 Download the build job script:
-`https://docs.isambard.ac.uk/user-documentation/guides/example-data/apptainer/build_nccl.sh`
+`https://docs.cirrus.ac.uk/user-documentation/guides/example-data/apptainer/build_nccl.sh`
 
 This Slurm job script runs inside the container and builds:
 1. NCCL (`v2.29.2-1`) — targeting `compute_90` (GH200)
@@ -106,7 +106,7 @@ apptainer run --nv \
 ### Step 5: Benchmark with nccl-tests
 
 Download the benchmark Slurm script:
-`https://docs.isambard.ac.uk/user-documentation/guides/example-data/apptainer/bench_nccl.sh`
+`https://docs.cirrus.ac.uk/user-documentation/guides/example-data/apptainer/bench_nccl.sh`
 
 ```bash
 #!/bin/bash

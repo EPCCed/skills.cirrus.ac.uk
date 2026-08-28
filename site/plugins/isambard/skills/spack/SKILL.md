@@ -1,26 +1,26 @@
 ---
 name: spack
 description: >
-  Guide for installing, configuring, and using Spack to build software on Isambard AI (BriCS)
-  supercomputers (Isambard-AI Phase 1, Phase 2, Isambard 3 Grace, Isambard 3 MACS).
-  Use this skill whenever a user asks about Spack on Isambard, setting up a Spack environment,
+  Guide for installing, configuring, and using Spack to build software on Cirrus AI (BriCS)
+  supercomputers (Cirrus-AI Phase 1, Phase 2, Cirrus 3 Grace, Cirrus 3 MACS).
+  Use this skill whenever a user asks about Spack on Cirrus, setting up a Spack environment,
   using the buildit configuration repository, concretizing or installing Spack packages,
   adding the isamrepo repository, targeting neoverse_v2 or aarch64 with Spack, or
   troubleshooting Spack builds on Cray HPE systems with Slingshot 11.
-  Also trigger for questions about building HPC software from source on Isambard,
+  Also trigger for questions about building HPC software from source on Cirrus,
   managing Spack environments, or using system compilers and MPI within Spack — even if
   the user doesn't explicitly say "Spack" but is clearly trying to build software with
-  dependency management on Isambard.
+  dependency management on Cirrus.
 compatibility: >
-  Isambard-AI and Isambard 3. Requires access to an Isambard login node and a
+  Cirrus-AI and Cirrus 3. Requires access to an Cirrus login node and a
   Spack installation or clone.
 metadata:
-  author: isambard-sc
+  author: cirrus-sc
   version: "1.0"
-  source_url: https://docs.isambard.ac.uk/user-documentation/guides/spack/
+  source_url: https://docs.cirrus.ac.uk/user-documentation/guides/spack/
 ---
 
-# Spack on Isambard
+# Spack on Cirrus
 
 [Spack](https://spack.readthedocs.io) is a package manager for building HPC software and its
 dependencies in a consistent, reproducible way, taking into account the target machine's
@@ -28,11 +28,11 @@ architecture and interconnect.
 
 > **Note:** Not every package is guaranteed to be supported. Only configurations outlined here
 > have been tested by BriCS. Known issues will be listed in the
-> [upstream docs](https://docs.isambard.ac.uk/user-documentation/guides/spack/) as they are reported.
+> [upstream docs](https://docs.cirrus.ac.uk/user-documentation/guides/spack/) as they are reported.
 
-**Prerequisites:** Familiarity with [modules](https://docs.isambard.ac.uk/user-documentation/guides/modules/),
-[MPI](https://docs.isambard.ac.uk/user-documentation/guides/mpi/), and
-[system specs](https://docs.isambard.ac.uk/specs/) (especially the Slingshot 11 interconnect).
+**Prerequisites:** Familiarity with [modules](https://docs.cirrus.ac.uk/user-documentation/guides/modules/),
+[MPI](https://docs.cirrus.ac.uk/user-documentation/guides/mpi/), and
+[system specs](https://docs.cirrus.ac.uk/specs/) (especially the Slingshot 11 interconnect).
 
 ## Critical Rules
 
@@ -49,10 +49,10 @@ architecture and interconnect.
 
 | System | Architecture | Spack target |
 |--------|-------------|--------------|
-| Isambard-AI Phase 1 | aarch64 / NVIDIA Grace | `neoverse_v2` |
-| Isambard-AI Phase 2 | aarch64 / NVIDIA Grace | `neoverse_v2` |
-| Isambard 3 Grace | aarch64 / NVIDIA Grace | `neoverse_v2` |
-| Isambard 3 MACS | x86_64 (mixed) | `zen3` or similar — build on the target node |
+| Cirrus-AI Phase 1 | aarch64 / NVIDIA Grace | `neoverse_v2` |
+| Cirrus-AI Phase 2 | aarch64 / NVIDIA Grace | `neoverse_v2` |
+| Cirrus 3 Grace | aarch64 / NVIDIA Grace | `neoverse_v2` |
+| Cirrus 3 MACS | x86_64 (mixed) | `zen3` or similar — build on the target node |
 
 Slingshot 11 (SS11) is the high-speed interconnect on all systems. The `buildit` config ensures
 correct dependencies are used to exploit it.
@@ -88,8 +88,8 @@ Verify it works and check the detected architecture:
 
 ```bash
 spack arch
-# linux-sles15-neoverse_v2   (Isambard-AI / Isambard 3 Grace)
-# linux-sles15-zen3          (Isambard 3 MACS, approx.)
+# linux-sles15-neoverse_v2   (Cirrus-AI / Cirrus 3 Grace)
+# linux-sles15-zen3          (Cirrus 3 MACS, approx.)
 ```
 
 ---
@@ -100,7 +100,7 @@ BriCS provides a configuration repository that pre-configures compilers, MPI, an
 correctly for each system. Clone it alongside the `spack` directory:
 
 ```bash
-git clone --depth 1 --branch=releases/v2.1 https://github.com/isambard-sc/buildit.git
+git clone --depth 1 --branch=releases/v2.1 https://github.com/cirrus-sc/buildit.git
 ```
 
 You should now have two directories: `spack/` and `buildit/`.
@@ -123,22 +123,22 @@ spack env activate ./myenv
 
 Apply the BriCS-provided packages config for your specific system, then set common options:
 
-**Isambard-AI Phase 1**
+**Cirrus-AI Phase 1**
 ```bash
 spack config add --file buildit/config/aip1/v1.1/packages.yaml
 ```
 
-**Isambard-AI Phase 2**
+**Cirrus-AI Phase 2**
 ```bash
 spack config add --file buildit/config/aip2/v1.1/packages.yaml
 ```
 
-**Isambard 3 Grace**
+**Cirrus 3 Grace**
 ```bash
 spack config add --file buildit/config/3/v1.1/packages.yaml
 ```
 
-**Isambard 3 MACS**
+**Cirrus 3 MACS**
 ```bash
 spack config add --file buildit/config/macs3/v1.1/packages.yaml
 ```
@@ -162,7 +162,7 @@ spack compiler list
 
 ---
 
-## Step 6 — Add the Isambard Package Repository (Optional)
+## Step 6 — Add the Cirrus Package Repository (Optional)
 
 The `buildit` repo provides extra packages and fixes not yet upstream in Spack:
 
@@ -230,7 +230,7 @@ spack env deactivate
 | Activate environment | `spack env activate ./myenv` |
 | Apply BriCS config | `spack config add --file buildit/config/<system>/v1.1/packages.yaml` |
 | List compilers | `spack compiler list` |
-| Add Isambard repo | `spack repo add ./buildit/repo/v1.1/spack_repo/isamrepo` |
+| Add Cirrus repo | `spack repo add ./buildit/repo/v1.1/spack_repo/isamrepo` |
 | Browse packages | `spack list` |
 | Add package to env | `spack add <package>` |
 | Resolve dependencies | `spack concretize` |
@@ -244,8 +244,8 @@ spack env deactivate
 
 - **Always use the `buildit` config** for the correct system — it wires up Slingshot 11 MPI, system compilers, and scientific libraries correctly. Skipping this and letting Spack build its own MPI will produce binaries that don't use the high-speed interconnect.
 - **`view:true`** means installed binaries are symlinked into `./myenv/.spack-env/view/` and available on `PATH` without loading modules.
-- **`concretizer:reuse:false`** forces fresh builds rather than reusing cached installs — recommended for correctness on Isambard.
-- **Isambard 3 MACS** has mixed CPU types — build on the node that matches your target architecture.
+- **`concretizer:reuse:false`** forces fresh builds rather than reusing cached installs — recommended for correctness on Cirrus.
+- **Cirrus 3 MACS** has mixed CPU types — build on the node that matches your target architecture.
 - The `spack/opt/` install tree is per-architecture (e.g. `linux-sles15-neoverse_v2`).
 
 ---
@@ -256,6 +256,6 @@ spack env deactivate
 - [Spack tutorial](https://spack-tutorial.readthedocs.io)
 - [Spack environments tutorial](https://spack-tutorial.readthedocs.io/en/latest/tutorial_environments.html)
 - [Spack FAQ](https://spack.readthedocs.io/en/latest/frequently_asked_questions.html)
-- [buildit repository](https://github.com/isambard-sc/buildit)
-- [Isambard MPI guide](https://docs.isambard.ac.uk/user-documentation/guides/mpi/)
-- [Isambard modules guide](https://docs.isambard.ac.uk/user-documentation/guides/modules/)
+- [buildit repository](https://github.com/cirrus-sc/buildit)
+- [Cirrus MPI guide](https://docs.cirrus.ac.uk/user-documentation/guides/mpi/)
+- [Cirrus modules guide](https://docs.cirrus.ac.uk/user-documentation/guides/modules/)

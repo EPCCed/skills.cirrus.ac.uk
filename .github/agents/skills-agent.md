@@ -6,7 +6,7 @@ This file tells AI agents (e.g. GitHub Copilot, Claude Code) how to create or up
 
 ## What is a Skill?
 
-A skill is a plain Markdown file that gives an AI agent the knowledge and rules it needs to assist users with a specific HPC or software topic on Isambard systems. Skills are served as static files from `https://skills.isambard.ac.uk` and are consumed by agent-based coding tools such as Claude Code.
+A skill is a plain Markdown file that gives an AI agent the knowledge and rules it needs to assist users with a specific HPC or software topic on Cirrus systems. Skills are served as static files from `https://skills.cirrus.ac.uk` and are consumed by agent-based coding tools such as Claude Code.
 
 ---
 
@@ -56,33 +56,33 @@ compatibility: >
   <Environment requirements — intended system, required tools, network
   access needs, etc.>
 metadata:
-  author: isambard-sc
+  author: cirrus-sc
   version: "1.0"
-  source_url: https://docs.isambard.ac.uk/<path-to-source-page>/
+  source_url: https://docs.cirrus.ac.uk/<path-to-source-page>/
   supplementary_urls:            # optional — list additional docs pages
-    - https://docs.isambard.ac.uk/<path-to-supplementary-page>/
+    - https://docs.cirrus.ac.uk/<path-to-supplementary-page>/
 ---
 ```
 
 - `name`: must match the parent directory name exactly (lowercase, hyphens, 1–64 characters)
 - `description`: required, max 1024 characters, should describe what the skill does AND when to use it
-- `compatibility`: optional but recommended for Isambard-specific skills
+- `compatibility`: optional but recommended for Cirrus-specific skills
 - `metadata.version`: increment when making significant changes
-- `metadata.source_url`: the primary docs.isambard.ac.uk URL this skill was derived from; used by the update agent to detect stale content
-- `metadata.supplementary_urls`: optional list of additional docs.isambard.ac.uk pages that contributed content to this skill
+- `metadata.source_url`: the primary docs.cirrus.ac.uk URL this skill was derived from; used by the update agent to detect stale content
+- `metadata.supplementary_urls`: optional list of additional docs.cirrus.ac.uk pages that contributed content to this skill
 
 ### Markdown body sections
 
 Required sections (add in this order where applicable):
 
 1. **Title** (`# <Skill Name> — Agent Skill`)
-2. **Links to full documentation** (canonical `docs.isambard.ac.uk` URLs)
+2. **Links to full documentation** (canonical `docs.cirrus.ac.uk` URLs)
 3. **Critical Rules** — any hard constraints the agent must never violate (use `⚠️` emoji and a clear prohibition list)
 4. **Overview** — brief context about the technology
 5. **How-to sections** — step-by-step instructions, command examples,
    code blocks
 6. **Common Issues / Troubleshooting**
-7. **Further Reading** — links to `docs.isambard.ac.uk` and other sources
+7. **Further Reading** — links to `docs.cirrus.ac.uk` and other sources
 
 Skill files must use fenced code blocks (triple backticks with language hint) for all command and script examples.
 
@@ -92,16 +92,16 @@ Keep `SKILL.md` under 500 lines. Move detailed reference material to `references
 
 ## Adding a new plugin (group of skills)
 
-Plugins are collections of related skills. Each plugin must have its own entry in `./site/.claude-plugin/marketplace.json` and a corresponding folder in `./site/plugins/`. For example, an "isambard3" plugin would have:
+Plugins are collections of related skills. Each plugin must have its own entry in `./site/.claude-plugin/marketplace.json` and a corresponding folder in `./site/plugins/`. For example, an "cirrus3" plugin would have:
 
 - An entry in `./site/.claude-plugin/marketplace.json` `plugins` array:
 
 ```json
 {
-  "name": "isambard3",
-  "description": "AI agent skills for Isambard 3 HPC system",
+  "name": "cirrus3",
+  "description": "AI agent skills for Cirrus 3 HPC system",
   "version": "1.0.0",
-  "source": "./plugins/isambard3"
+  "source": "./plugins/cirrus3"
 }
 ```
 
@@ -109,22 +109,22 @@ Plugins are collections of related skills. Each plugin must have its own entry i
 
 ```json
 {
-  "name": "isambard3",
-  "description": "AI agent skills for Isambard 3 HPC system",
+  "name": "cirrus3",
+  "description": "AI agent skills for Cirrus 3 HPC system",
   "version": "1.0.0"
 }
 ```
 
-- A folder `./site/plugins/isambard3/` containing:
+- A folder `./site/plugins/cirrus3/` containing:
   - `.claude-plugin/plugin.json` with plugin metadata
   - `skills/` folder with one subfolder per skill, each containing a `SKILL.md`
 
-- The `./site/plugins/isambard3/.claude-plugin/plugin.json` file should have the following structure:
+- The `./site/plugins/cirrus3/.claude-plugin/plugin.json` file should have the following structure:
 
 ```json
 {
-  "name": "isambard3",
-  "description": "AI agent skills for Isambard 3 HPC system",
+  "name": "cirrus3",
+  "description": "AI agent skills for Cirrus 3 HPC system",
   "version": "1.0.0"
 }
 ```
@@ -145,11 +145,11 @@ Also add an entry to `./site/marketplace.json` (used by other agent tools). The 
 {
   "name": "<Human-readable skill name>",
   "description": "<One or two sentence description>",
-  "url": "https://skills.isambard.ac.uk/skills/<skill-name>/SKILL.md"
+  "url": "https://skills.cirrus.ac.uk/skills/<skill-name>/SKILL.md"
 }
 ```
 
-Use the canonical `https://skills.isambard.ac.uk/...` URL — never the raw GitHub URL. Keep the array sorted alphabetically by `"name"`.
+Use the canonical `https://skills.cirrus.ac.uk/...` URL — never the raw GitHub URL. Keep the array sorted alphabetically by `"name"`.
 
 ---
 
@@ -181,7 +181,7 @@ description and a link to the skill file. When adding or updating a skill:
 
 When creating a new skill, complete the following steps in order:
 
-- [ ] Select the plugin folder to add the skill to (e.g. `isambard3`), or create a new plugin if needed
+- [ ] Select the plugin folder to add the skill to (e.g. `cirrus3`), or create a new plugin if needed
 - [ ] Create the directory `site/plugins/<plugin-name>/skills/<skill-name>/`
 - [ ] Create `site/plugins/<plugin-name>/skills/<skill-name>/SKILL.md` with YAML frontmatter and the required sections listed above
 - [ ] Add an entry to `site/marketplace.json` `skills` array
@@ -206,5 +206,5 @@ When creating a new skill, complete the following steps in order:
 - Use imperative mood: "Run `sbatch job.sh`" not "You can run `sbatch`".
 - Always include a **Critical Rules** section for any skill where there are hard constraints (rate limits, forbidden commands, security rules).
 - Keep code examples short and self-contained.
-- All URLs in skill files must point to `https://skills.isambard.ac.uk/…` or `https://docs.isambard.ac.uk/…`, not to raw GitHub URLs.
+- All URLs in skill files must point to `https://skills.cirrus.ac.uk/…` or `https://docs.cirrus.ac.uk/…`, not to raw GitHub URLs.
 - Markdown files should wrap at 80 characters (VS Code settings enforce this automatically via `.vscode/settings.json`).

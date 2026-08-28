@@ -86,7 +86,7 @@ Expected: ~2.3 GB/s bus bandwidth — NCCL is using TCP sockets, not RDMA.
 export LD_LIBRARY_PATH=$(realpath aws-ofi-nccl/build/lib):$LD_LIBRARY_PATH
 
 # Source all Slingshot NCCL environment variables
-# Download from: https://docs.isambard.ac.uk/user-documentation/guides/example-data/nccl/env_vars.sh
+# Download from: https://docs.cirrus.ac.uk/user-documentation/guides/example-data/nccl/env_vars.sh
 source env_vars.sh
 
 srun --nodes 2 --gpus 8 --cpus-per-task 72 --network=disable_rdzv_get \

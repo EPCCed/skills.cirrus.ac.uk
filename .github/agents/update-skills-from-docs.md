@@ -1,12 +1,12 @@
-# Agent: Create and Update Skills from docs.isambard.ac.uk
+# Agent: Create and Update Skills from docs.cirrus.ac.uk
 
 ## Purpose
 
-Use this agent to create a new skill file or update an existing one by fetching the authoritative content from `https://docs.isambard.ac.uk`.
+Use this agent to create a new skill file or update an existing one by fetching the authoritative content from `https://docs.cirrus.ac.uk`.
 
 Invoke this agent when:
 
-- A new documentation page on docs.isambard.ac.uk should become a skill
+- A new documentation page on docs.cirrus.ac.uk should become a skill
 - A user asks whether an existing skill is up to date
 - The docs site has been updated and skills derived from it need refreshing
 
@@ -14,39 +14,39 @@ Invoke this agent when:
 
 ## Known Documentation Sources
 
-The table below maps docs.isambard.ac.uk pages to their corresponding skill names. Use this as the starting point for create or update tasks.
+The table below maps docs.cirrus.ac.uk pages to their corresponding skill names. Use this as the starting point for create or update tasks.
 
 ### Guides
 
-| docs.isambard.ac.uk page | Skill name | Skill file | Status |
+| docs.cirrus.ac.uk page | Skill name | Skill file | Status |
 |---|---|---|---|
-| https://docs.isambard.ac.uk/user-documentation/guides/slurm/ | `slurm` | `skills/slurm/SKILL.md` | ✅ exists |
-| https://docs.isambard.ac.uk/user-documentation/guides/login/ | `login` | `skills/login/SKILL.md` | ❌ not yet created |
-| https://docs.isambard.ac.uk/user-documentation/guides/file_transfer/ | `file-transfer` | `skills/file-transfer/SKILL.md` | ❌ not yet created |
-| https://docs.isambard.ac.uk/user-documentation/guides/python/ | `python` | `skills/python/SKILL.md` | ✅ |
-| https://docs.isambard.ac.uk/user-documentation/guides/containers/ | `containers` | `skills/containers/SKILL.md` | ✅ |
-| https://docs.isambard.ac.uk/user-documentation/guides/modules/ | `modules` | `skills/modules/SKILL.md` | ✅ |
-| https://docs.isambard.ac.uk/user-documentation/guides/jupyter/ | `jupyter` | `skills/jupyter/SKILL.md` | ❌ not yet created |
-| https://docs.isambard.ac.uk/user-documentation/guides/vscode/ | `vscode` | `skills/vscode/SKILL.md` | ❌ not yet created |
-| https://docs.isambard.ac.uk/user-documentation/guides/mpi/ | `mpi` | `skills/mpi/SKILL.md` | ✅ |
-| https://docs.isambard.ac.uk/user-documentation/guides/spack/ | `spack` | `skills/spack/SKILL.md` | ✅ |
-| https://docs.isambard.ac.uk/user-documentation/guides/nccl/ | `nccl` | `skills/nccl/SKILL.md` | ✅ |
-| https://docs.isambard.ac.uk/user-documentation/guides/accounting/ | `accounting` | `skills/accounting/SKILL.md` | ❌ not yet created |
+| https://docs.cirrus.ac.uk/user-documentation/guides/slurm/ | `slurm` | `skills/slurm/SKILL.md` | ✅ exists |
+| https://docs.cirrus.ac.uk/user-documentation/guides/login/ | `login` | `skills/login/SKILL.md` | ❌ not yet created |
+| https://docs.cirrus.ac.uk/user-documentation/guides/file_transfer/ | `file-transfer` | `skills/file-transfer/SKILL.md` | ❌ not yet created |
+| https://docs.cirrus.ac.uk/user-documentation/guides/python/ | `python` | `skills/python/SKILL.md` | ✅ |
+| https://docs.cirrus.ac.uk/user-documentation/guides/containers/ | `containers` | `skills/containers/SKILL.md` | ✅ |
+| https://docs.cirrus.ac.uk/user-documentation/guides/modules/ | `modules` | `skills/modules/SKILL.md` | ✅ |
+| https://docs.cirrus.ac.uk/user-documentation/guides/jupyter/ | `jupyter` | `skills/jupyter/SKILL.md` | ❌ not yet created |
+| https://docs.cirrus.ac.uk/user-documentation/guides/vscode/ | `vscode` | `skills/vscode/SKILL.md` | ❌ not yet created |
+| https://docs.cirrus.ac.uk/user-documentation/guides/mpi/ | `mpi` | `skills/mpi/SKILL.md` | ✅ |
+| https://docs.cirrus.ac.uk/user-documentation/guides/spack/ | `spack` | `skills/spack/SKILL.md` | ✅ |
+| https://docs.cirrus.ac.uk/user-documentation/guides/nccl/ | `nccl` | `skills/nccl/SKILL.md` | ✅ |
+| https://docs.cirrus.ac.uk/user-documentation/guides/accounting/ | `accounting` | `skills/accounting/SKILL.md` | ❌ not yet created |
 
 ### Applications
 
-| docs.isambard.ac.uk page | Skill name | Skill file | Status |
+| docs.cirrus.ac.uk page | Skill name | Skill file | Status |
 |---|---|---|---|
-| https://docs.isambard.ac.uk/user-documentation/applications/ML-packages/ | `ml-packages` | `skills/ml-packages/SKILL.md` | ❌ not yet created |
-| https://docs.isambard.ac.uk/user-documentation/applications/alphafold/ | `alphafold` | `skills/alphafold/SKILL.md` | ❌ not yet created |
+| https://docs.cirrus.ac.uk/user-documentation/applications/ML-packages/ | `ml-packages` | `skills/ml-packages/SKILL.md` | ❌ not yet created |
+| https://docs.cirrus.ac.uk/user-documentation/applications/alphafold/ | `alphafold` | `skills/alphafold/SKILL.md` | ❌ not yet created |
 
 ### Information
 
-| docs.isambard.ac.uk page | Skill name | Skill file | Status |
+| docs.cirrus.ac.uk page | Skill name | Skill file | Status |
 |---|---|---|---|
-| https://docs.isambard.ac.uk/user-documentation/information/job-scheduling/ | *(supplementary to `slurm`)* | — | — |
+| https://docs.cirrus.ac.uk/user-documentation/information/job-scheduling/ | *(supplementary to `slurm`)* | — | — |
 
-When new pages appear on docs.isambard.ac.uk that are not listed above, add them to the appropriate table before proceeding.
+When new pages appear on docs.cirrus.ac.uk that are not listed above, add them to the appropriate table before proceeding.
 
 ---
 
@@ -78,7 +78,7 @@ Read `.github/agents/skills-agent.md` in full to confirm the current folder stru
 Fetch the docs page. If the content is paginated or truncated, fetch additional chunks until you have the full page. Also fetch any linked sub-pages that are important to the skill topic.
 
 For the Slurm skill, the supplementary job-scheduling page was also fetched:
-https://docs.isambard.ac.uk/user-documentation/information/job-scheduling/
+https://docs.cirrus.ac.uk/user-documentation/information/job-scheduling/
 
 ### Step 4 — Identify Critical Rules
 
@@ -113,12 +113,12 @@ description: >
   covers, and when an agent should activate it. Include keywords a user
   would say when they need this skill.>
 compatibility: >
-  Isambard-AI and/or Isambard 3 (Grace, MACS). Requires access to an
-  Isambard login node.
+  Cirrus-AI and/or Cirrus 3 (Grace, MACS). Requires access to an
+  Cirrus login node.
 metadata:
-  author: isambard-sc
+  author: cirrus-sc
   version: "1.0"
-  source_url: <exact URL of the primary docs.isambard.ac.uk page fetched>
+  source_url: <exact URL of the primary docs.cirrus.ac.uk page fetched>
   supplementary_urls:            # include if additional pages were fetched
     - <URL of each supplementary docs page>
 ---
@@ -126,13 +126,13 @@ metadata:
 
 **Body — required sections in order:**
 
-1. `# <Topic> on Isambard — Agent Skill`
+1. `# <Topic> on Cirrus — Agent Skill`
 2. Links to the source docs page(s) (plain URL, no Markdown link syntax)
 3. `## ⚠️ Critical Rule: <Title>` for each hard constraint (if any)
 4. `## System Overview` or equivalent context section
 5. Detailed how-to sections with fenced code blocks
 6. `## Troubleshooting` section
-7. `## Further Reading` section with docs.isambard.ac.uk links
+7. `## Further Reading` section with docs.cirrus.ac.uk links
 
 **Style rules:**
 - Write for an AI agent reader, not a human

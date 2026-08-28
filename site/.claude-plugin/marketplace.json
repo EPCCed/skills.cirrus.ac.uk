@@ -1,24 +1,24 @@
 {
-  "name": "isambard-skills",
+  "name": "cirrus-skills",
   "owner": {
-    "name": "Isambard SC",
-    "email": "support@isambard.ac.uk"
+    "name": "Cirrus SC",
+    "email": "support@cirrus.ac.uk"
   },
   "metadata": {
-    "description": "AI agent skills for Isambard HPC systems",
+    "description": "AI agent skills for Cirrus HPC systems",
     "version": "1.0"
   },
   "plugins": [
     {
-      "name": "isambard",
-      "source": "./plugins/isambard",
-      "description": "AI agent skills for Isambard HPC systems",
+      "name": "cirrus",
+      "source": "./plugins/cirrus",
+      "description": "AI agent skills for Cirrus HPC systems",
       "version": "1.0",
       "author": {
-        "name": "Isambard SC"
+        "name": "Cirrus SC"
       },
-      "homepage": "https://skills.isambard.ac.uk",
-      "repository": "https://github.com/isambard-sc/skills.isambard.ac.uk"
+      "homepage": "https://skills.cirrus.ac.uk",
+      "repository": "https://github.com/cirrus-sc/skills.cirrus.ac.uk"
     }
   ]
 }

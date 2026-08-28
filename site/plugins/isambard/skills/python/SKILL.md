@@ -1,25 +1,25 @@
 ---
 name: python
 description: >
-  Guide for installing and managing Python environments on Isambard AI (BriCS) supercomputers.
-  Use this skill whenever a user asks about Python on Isambard, setting up Conda/Miniforge,
+  Guide for installing and managing Python environments on Cirrus AI (BriCS) supercomputers.
+  Use this skill whenever a user asks about Python on Cirrus, setting up Conda/Miniforge,
   using uv, installing pip packages, building from source on aarch64/Arm64, mpi4py on HPC,
-  virtual environments on Isambard, or troubleshooting Python package builds for Linux Arm64.
+  virtual environments on Cirrus, or troubleshooting Python package builds for Linux Arm64.
   Also trigger for questions about Cray Python, build isolation, pyproject.toml on Arm, or
-  finding aarch64-compatible packages — even if the user doesn't say "Isambard" explicitly
+  finding aarch64-compatible packages — even if the user doesn't say "Cirrus" explicitly
   but is clearly working on an HPC or Arm Linux environment.
 compatibility: >
-  Isambard-AI and Isambard 3. Requires access to an Isambard login node and Python
+  Cirrus-AI and Cirrus 3. Requires access to an Cirrus login node and Python
   environment tools such as Miniforge, pip, or uv.
 metadata:
-  author: isambard-sc
+  author: cirrus-sc
   version: "1.0"
-  source_url: https://docs.isambard.ac.uk/user-documentation/guides/python/
+  source_url: https://docs.cirrus.ac.uk/user-documentation/guides/python/
 ---
 
-# Python on Isambard AI
+# Python on Cirrus AI
 
-Isambard supercomputers run **Linux on Arm64 (`aarch64`)** — this shapes almost every aspect of Python environment management, since many packages lack prebuilt `aarch64` wheels and must be compiled from source.
+Cirrus supercomputers run **Linux on Arm64 (`aarch64`)** — this shapes almost every aspect of Python environment management, since many packages lack prebuilt `aarch64` wheels and must be compiled from source.
 
 Python and packages can be managed with `pip`, `conda`, or `uv`. **Conda via Miniforge** is the recommended approach. All workflows should use **virtual environments** to isolate dependencies.
 
@@ -34,7 +34,7 @@ Use:
 - Never install packages into the Conda `base` environment.
 - Do not run `conda init`; activate Miniforge manually.
 - Always use `python3 -m pip` rather than bare `pip`.
-- Prefer Conda on Isambard, and use `uv` only when you need a simpler local venv workflow.
+- Prefer Conda on Cirrus, and use `uv` only when you need a simpler local venv workflow.
 
 ---
 
@@ -200,7 +200,7 @@ requires = ["setuptools", "wheel"]
 build-backend = "setuptools.build_meta"
 ```
 
-On Isambard-AI, `sys.platform` returns `"linux"` and `platform.uname().machine` returns `"aarch64"`.
+On Cirrus-AI, `sys.platform` returns `"linux"` and `platform.uname().machine` returns `"aarch64"`.
 
 ### Checking dependencies for `aarch64` support
 
@@ -213,7 +213,7 @@ On Isambard-AI, `sys.platform` returns `"linux"` and `platform.uname().machine` 
 
 ## Machine Learning Packages
 
-Support for popular ML packages on `aarch64` is documented on the [Isambard ML packages applications page](https://docs.isambard.ac.uk/user-documentation/applications/ML-packages/).
+Support for popular ML packages on `aarch64` is documented on the [Cirrus ML packages applications page](https://docs.cirrus.ac.uk/user-documentation/applications/ML-packages/).
 
 ---
 
@@ -232,7 +232,7 @@ Support for popular ML packages on `aarch64` is documented on the [Isambard ML p
 
 ## Useful Resources
 
-- [Isambard documentation](https://docs.isambard.ac.uk)
+- [Cirrus documentation](https://docs.cirrus.ac.uk)
 - [Miniforge on GitHub](https://github.com/conda-forge/miniforge)
 - [uv docs](https://docs.astral.sh/uv/)
 - [Anaconda.org package search](https://anaconda.org)
