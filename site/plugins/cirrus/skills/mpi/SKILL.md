@@ -1,5 +1,5 @@
 ---
-name: mpi
+name: cirrus-mpi
 description: >
   Guide for using MPI on Cirrus HPC system.
   Use this skill whenever a user asks about MPI on Cirrus, running multi-node MPI jobs,

@@ -48,7 +48,7 @@ resources become available.
 
 | System | Cores per node | Notes |
 |--------|------------------|---------------|
-| Cirrus | 144 per socket (42 sockets per node) |  |
+| Cirrus | 144 per socket (2 sockets per node) |  |
 
 Max walltime on all systems: **24 hours**. See the [job scheduling page](https://docs.cirrus.ac.uk/user-guide/batch/) for partition and QOS limits.
 

@@ -1,7 +1,7 @@
 ---
-name: cirrus-hpc-cai-ode
+name: cirrus-hpc
 description: >
-  Guidance for writing, reviewing, and running AI-generated code responsibly on
+  Guidance for writing, reviewing, and running work responsibly on
   Cirrus NCR UK national HPC resource. Use this skill whenever generating, adapting, or debugging
   code intended to run on Cirrus, writing Slurm job scripts, managing
   storage, installing software, or ensuring compliance with EIDF policies.
