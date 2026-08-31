@@ -26,7 +26,7 @@ Attach an interactive shell to a running job without interfering with it:
 squeue --me
 
 # Attach (--overlap allows the new step to share the existing allocation)
-srun --ntasks=1 --gpus=1 --jobid=<JOBID> --overlap --pty /bin/bash -l
+srun --nodes=1 --ntasks-per-node=1 --cpus-per-task=1 --jobid=<JOBID> --overlap --pty /bin/bash -l
 
 # Inspect, then exit — the original job continues
 exit
@@ -37,32 +37,22 @@ exit
 ## Multi-node Jobs
 
 Use `--nodes` to request more than one node. `srun` launches processes across all allocated
-nodes automatically.
-
-**Cirrus-AI** — use `--gpus-per-node=4` to request full nodes (4 GH200 Superchips each):
-
-```bash
-#!/bin/bash
-#SBATCH --job-name=multi_node
-#SBATCH --output=multi_node.out
-#SBATCH --nodes=2
-#SBATCH --gpus-per-node=4
-#SBATCH --time=01:00:00
-
-srun ./my_application
-```
-
-**Cirrus 3 Grace** — use `--ntasks-per-node` for MPI ranks per node (144 cores per node):
+nodes automatically. This example specifies 288 MPI processes per node - 1152 MPI processes
+in total across 4 nodes.
 
 ```bash
 #!/bin/bash
-#SBATCH --job-name=multi_node
-#SBATCH --output=multi_node.out
-#SBATCH --nodes=2
-#SBATCH --ntasks-per-node=144
-#SBATCH --time=01:00:00
+#SBATCH --job-name=my_job
+#SBATCH --nodes=4
+#SBATCH --ntasks-per-node=288
+#SBATCH --cpus-per-task=1
+#SBATCH --exclusive
+#SBATCH --time=00:05:00
+#SBATCH --partition=standard
+#SBATCH --qos=standard
+#SBATCH --account=<budgetID>   # Replace "<budgetID>" with your budget code
 
-srun ./my_mpi_application
+sun --hint=nomultithread --distribution=block:block my_mpi_app.x
 ```
 
 Useful environment variables set by Slurm for multi-node jobs:
@@ -73,6 +63,8 @@ Useful environment variables set by Slurm for multi-node jobs:
 | `$SLURM_NODELIST` | Hostnames of all allocated nodes |
 | `$SLURM_NTASKS` | Total tasks across all nodes |
 | `$SLURM_NODEID` | Index of the node the current process is on (0-based) |
+
+**Important:** `--exclusive` is required when submitting multi-node jobs on Cirrus.
 
 ---
 
@@ -85,31 +77,21 @@ Combines MPI (between processes) with OpenMP (threads within each process). Key 
 
 Product of `--ntasks-per-node` × `--cpus-per-task` = cores used per node.
 
-**Cirrus-AI** — natural mapping: 1 MPI rank per Superchip × 72 OpenMP threads:
+**Cirrus** — natural mapping: 1 MPI rank per CCX × 8 OpenMP threads (36 MPI processes per node):
 
 ```bash
 #!/bin/bash
 #SBATCH --nodes=2
-#SBATCH --gpus-per-node=4
-#SBATCH --ntasks-per-node=4
-#SBATCH --cpus-per-task=72
+#SBATCH --ntasks-per-node=36
+#SBATCH --cpus-per-task=8
+#SBATCH --exclusive
 #SBATCH --time=01:00:00
+#SBATCH --partition=standard
+#SBATCH --qos=standard
+#SBATCH --account=<budgetID>   # Replace "<budgetID>" with your budget code
 
 export OMP_NUM_THREADS=$SLURM_CPUS_PER_TASK
-srun ./my_hybrid_application
-```
-
-**Cirrus 3 Grace** — 1 MPI rank per Superchip × 72 OpenMP threads (2 ranks per node):
-
-```bash
-#!/bin/bash
-#SBATCH --nodes=2
-#SBATCH --ntasks-per-node=2
-#SBATCH --cpus-per-task=72
-#SBATCH --time=01:00:00
-
-export OMP_NUM_THREADS=$SLURM_CPUS_PER_TASK
-srun ./my_hybrid_application
+srun --hint=nomultithread --distribution=block:block ./my_hybrid_application.x
 ```
 
 For finer core-binding control, see `--cpu-bind` in the [srun man page](https://slurm.schedmd.com/srun.html).
@@ -123,18 +105,18 @@ against it from the login node — useful for several short interactive commands
 repeatedly waiting in the queue.
 
 ```bash
-salloc --nodes=1 --gpus=1 --time=00:10:00
+salloc --nodes=1 --ntasks-per-node=1 --cpus-per-task=1 --time=00:10:00 --partition=standard --qos=standard --account=<budgetID>
 # Granted job allocation <JOBID>
 
 srun hostname
-srun nvidia-smi --list-gpus
+srun cpuinfo
 # ... run more commands ...
 
 scancel <JOBID>    # release when done — always do this
 ```
 
 > **Always release `salloc` allocations with `scancel` when finished.** An idle allocation
-> holds resources other users cannot access and consumes your project's node-hour credits.
+> holds resources other users cannot access and consumes your project's coreh allocation.
 
 ---
 
@@ -184,11 +166,10 @@ Without `--exclusive`, both steps inherit the full job allocation and may confli
 ### At the job level (`#SBATCH` directive) — use with caution
 
 Prevents other jobs from sharing the same physical node. **You are charged for the whole
-node regardless of how many GPUs or cores you actually request.**
+node regardless of how many cores you actually request.**
 
-On Cirrus-AI: a node has 4 GH200 Superchips. If you request `--gpus=1 --exclusive`,
-you are charged for all 4. Only use when your workload is sensitive to co-tenant noise or
-requires exclusive access to all NUMA domains / memory.
+On Cirrus: a node has 288 cores. If you request `--nodes=1 --ntasks-per-node=1 --cpus-per-task=1 --exclusive`,
+you are charged for all 288 cores even though you are only using 1 core. Only use when your workload is sensitive to co-tenant noise or requires exclusive access to all NUMA domains / memory.
 
 ```bash
 #SBATCH --exclusive
@@ -196,15 +177,27 @@ requires exclusive access to all NUMA domains / memory.
 
 ---
 
-## Large Jobs and Scheduling Etiquette
+## Using the high memory nodes
 
-For jobs requiring **256 or more nodes**, consider scheduling outside Bristol business hours:
+If you want to use the high memory nodes, you must use `--partition=highmem` and `--qos=highmem`:
 
 ```bash
-#SBATCH --begin=YYYY-MM-DDTHH:MM:SS
+#SBATCH --qos=highmem
+#SBATCH --partition=highmem
 ```
 
-`--begin` is the *earliest* start time; the job may start later if resources are unavailable.
+High memory jobs often see longer queue times than standard memory jobs
+
+---
+
+## Large Jobs
+
+For jobs requiring **128 or more nodes** you must use `--qos=largescale`:
+
+```bash
+#SBATCH --qos=largescale
+#SBATCH --partition=standard
+```
 
 ---
 
@@ -251,11 +244,9 @@ overall allocation is not spent. Prefer concurrent `srun` steps for many short t
 ## QOS and Resource Limits
 
 ```bash
-sacctmgr show qos workq_qos              # QOS settings for workq partition
+sacctmgr show qos standard              # QOS settings for standard partition
 sacctmgr show user $(whoami) withassoc   # your accounts, QOS, and limits
 ```
-
-`MaxTRESPA` limits simultaneous resource usage (GPUs, nodes) per project.
 
 Slurm reserves credits based on **requested** resources × **requested** walltime when a job
 is queued or running. Only actual consumption is charged after completion, but the

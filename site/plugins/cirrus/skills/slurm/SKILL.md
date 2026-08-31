@@ -2,9 +2,9 @@
 name: slurm
 description: >
   Guide for submitting, monitoring, and managing HPC jobs using the Slurm workload manager
-  on Cirrus-AI (GH200 GPU nodes) and Cirrus 3 (Grace CPU and MACS nodes).
+  on Cirrus.
   Use this skill whenever a user asks about Slurm on Cirrus, writing sbatch scripts,
-  requesting GPUs or CPU resources, srun or salloc, job arrays, job dependencies,
+  requesting CPU resources, srun or salloc, job arrays, job dependencies,
   multi-node jobs, hybrid MPI/OpenMP jobs, QOS limits, scheduler flexibility (--time-min,
   --nodes range), --exclusive, sacct, polling intervals, job accounting, or why a job
   is stuck in PENDING, failing, or hitting resource limits.
@@ -12,17 +12,17 @@ description: >
   mean, how to chain jobs, or how to debug a running job — even if the user doesn't
   explicitly say "Slurm".
 compatibility: >
-  Cirrus-AI and Cirrus 3. Requires access to an Cirrus login node, Slurm
+  Cirrus. Requires access to an Cirrus login node, Slurm
   commands, and the scheduler environment.
 metadata:
   author: cirrus-sc
   version: "1.0"
-  source_url: https://docs.cirrus.ac.uk/user-documentation/guides/slurm/
+  source_url: https://docs.cirrus.ac.uk/user-guide/batch/
 ---
 
 # Slurm on Cirrus
 
-Both Cirrus-AI and Cirrus 3 use the [Slurm Workload Manager](https://slurm.schedmd.com/)
+Cirrus uses the [Slurm Workload Manager](https://slurm.schedmd.com/)
 to schedule jobs on compute nodes. Jobs are submitted to a queue and run when the requested
 resources become available.
 
@@ -36,21 +36,21 @@ resources become available.
 - Never poll `squeue`, `sinfo`, or any scheduler status command in a tight loop.
 - Always submit jobs with `sbatch` or launch commands with `srun`; do not use `mpirun`
   or `mpiexec` on Cirrus.
-- Always set explicit `--time`, `--nodes`, and `--gpus` when applicable.
-- Use `--exclusive` only when the workload truly requires an entire node.
-- Do not request GPUs on Cirrus 3 systems.
+- Always set explicit `--time`, `--nodes`, and `--ntasks-per-node` when applicable.
+- Use `--exclusive` only when the workload truly requires an entire node or when you are submitting multi-node jobs.
+- Slurm commands to run or submit jobs **must** specify a partition (`--partition` option) and QoS (`--qos` option).
+- Slurm commands to run or submit jobs **must** specify an budget to charge to using the `--account` option. The budget is often the same as your project ID.
+- Do not request GPUs on Cirrus.
 
 ---
 
-## System Differences
+## System Setup
 
-| System | GPU resource flag | Cores per node | Notes |
-|--------|------------------|---------------|-------|
-| Cirrus-AI | `--gpus=<n>` | 72 per GH200 Superchip (4 per node) | 1 GPU = 1 full GH200 Superchip (72 cores + memory) |
-| Cirrus 3 Grace | — | 144 (2 × 72-core Superchips) | CPU-only; shared between users by default |
-| Cirrus 3 MACS | — | Varies | x86_64 nodes; check specs |
+| System | Cores per node | Notes |
+|--------|------------------|---------------|
+| Cirrus | 144 per socket (42 sockets per node) |  |
 
-Max walltime on all systems: **24 hours**. See the [job scheduling page](https://docs.cirrus.ac.uk/user-documentation/information/job-scheduling/) for partition limits and per-project quotas.
+Max walltime on all systems: **24 hours**. See the [job scheduling page](https://docs.cirrus.ac.uk/user-guide/batch/) for partition and QOS limits.
 
 ---
 
@@ -58,7 +58,6 @@ Max walltime on all systems: **24 hours**. See the [job scheduling page](https:/
 
 ```bash
 squeue --me                    # your jobs only
-squeue --me --Format="JobID,Name,StateCompact:6,TimeUsed,ReasonList,Dependency:32"
 sinfo                          # partition and node state (general impression only)
 sacct                          # current and recently completed jobs with exit codes
 ```
@@ -69,41 +68,33 @@ Common job states: `R` = running, `PD` = pending, `CG` = completing, `F` = faile
 
 ## Submitting Jobs
 
-### Two common mistakes
+### Key information
 
-- **Resources spread across nodes:** Always include `--nodes=1` for single-node jobs. Without it, Slurm may draw GPUs or tasks from multiple nodes.
 - **Accidental node reservation:** `--exclusive` as an `#SBATCH` directive reserves an entire node regardless of actual usage. You are charged for the whole node. Use only when your workload genuinely requires it.
+- **Multi-node jobs require `--exclusive`:** If you are running multi-node jobs, you must use `--exclusive`.
+- When launching parallel jobs using `srun` within a job script, the option `--hint=nomultithread` should be added to the `srun` command to ensure that only physical cores are used.
+- When launching parallel jobs using `srun` within a job script, the option `--distribution=block:block` will typically be used to ensure physical cores are assigned sequentially to MPI processes - this arrangement is important for good MPI collective performance on Cirrus
 
 ### Batch jobs (`sbatch`)
 
 ```bash
 sbatch my_job.sh
-cat my_job.out    # output appears here once job completes
 ```
 
-**Cirrus-AI — single GPU job:**
+**Cirrus — single core job:**
 ```bash
 #!/bin/bash
 #SBATCH --job-name=my_job
-#SBATCH --output=my_job.out
 #SBATCH --nodes=1
-#SBATCH --gpus=1
+#SBATCH --ntasks-per-node=1
+#SBATCH --cpus-per-task=1
 #SBATCH --time=00:05:00
+#SBATCH --partition=standard
+#SBATCH --qos=standard
+#SBATCH --account=<budgetID>   # Replace "<budgetID>" with your budget code
 
 hostname
-nvidia-smi --list-gpus
-```
-
-**Cirrus 3 Grace — single node job:**
-```bash
-#!/bin/bash
-#SBATCH --job-name=my_job
-#SBATCH --output=my_job.out
-#SBATCH --nodes=1
-#SBATCH --time=00:05:00
-
-hostname
-numactl -s
+cpuinfo
 ```
 
 Always set `--time` — shorter walltimes usually mean shorter queue waits.
@@ -112,28 +103,31 @@ Always set `--time` — shorter walltimes usually mean shorter queue waits.
 
 ```bash
 # Run a single command on a compute node
-srun --nodes=1 --gpus=1 --time=00:02:00 nvidia-smi --list-gpus
+srun --nodes=1 --ntasks-per-node=1 --cpus-per-task=1 --partition=standard --qos=standard --account=<budgetID> --time=00:02:00 cpuinfo
 
 # Start an interactive shell (job ends when you close the terminal)
-srun --nodes=1 --gpus=1 --time=00:15:00 --pty /bin/bash --login
+srun --nodes=1 --ntasks-per-node=1 --cpus-per-task=1 --time=00:15:00 --partition=standard --qos=standard --account=<budgetID> --pty /bin/bash --login
 ```
 
-### Running multiple tasks in parallel
+### Running multiple tasks in parallel on a single node
+
+**Cirrus — single full node job:**
 
 ```bash
-# Inside a batch script: 4 tasks, one per GPU
-#SBATCH --gpus=4
-#SBATCH --ntasks-per-gpu=1
-srun python3 myscript.py
+#!/bin/bash
+#SBATCH --job-name=my_job
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=288
+#SBATCH --cpus-per-task=1
+#SBATCH --exclusive
+#SBATCH --time=00:05:00
+#SBATCH --partition=standard
+#SBATCH --qos=standard
+#SBATCH --account=<budgetID>   # Replace "<budgetID>" with your budget code
 
-# Concurrent independent job steps
-srun --ntasks=1 --gpus=1 --exclusive step_a &
-srun --ntasks=1 --gpus=1 --exclusive step_b &
-wait
+hostname
+sun --hint=nomultithread --distribution=block:block my_mpi_app.x
 ```
-
-`--exclusive` on `srun` (not `#SBATCH`) prevents steps from over-subscribing the allocation
-and allows them to run concurrently. This is the *safe* use of `--exclusive`.
 
 ---
 
@@ -188,14 +182,14 @@ scancel --me            # cancel all your jobs
 See **`references/advanced.md`** for full detail on:
 - `sacct` for job history and exit codes
 - Attaching an interactive shell to a running job (`srun --jobid --overlap`)
-- Multi-node jobs (`--nodes`, `--gpus-per-node`, `--ntasks-per-node`)
+- Multi-node jobs (`--nodes`, `--ntasks-per-node`)
 - Hybrid MPI/OpenMP jobs (`--ntasks-per-node`, `--cpus-per-task`, `OMP_NUM_THREADS`)
 - Interactive allocations (`salloc`)
 - Scheduler flexibility (`--time-min`, `--nodes` range)
 - `--exclusive` at the job level — when it's needed and what it costs
 - QOS limits, `sacctmgr`, and allocation limit errors
 - Job requeues, restarts, and `SLURM_RESTART_COUNT`
-- Large jobs (256+ nodes) and scheduling etiquette
+- Large jobs (128+ nodes)
 
 Read this file when helping with any of these topics.
 
@@ -220,24 +214,22 @@ Read this file when a user is asking why their job won't start, is failing, or i
 | View your jobs | `squeue --me` |
 | Check job history + exit codes | `sacct` |
 | Submit batch job | `sbatch my_job.sh` |
-| Interactive command | `srun --nodes=1 --gpus=1 --time=00:05:00 <cmd>` |
-| Interactive shell | `srun --nodes=1 --gpus=1 --time=00:15:00 --pty /bin/bash --login` |
-| Reserve allocation | `salloc --nodes=1 --gpus=1 --time=00:10:00` |
+| Interactive command | `srun --nodes=1 --ntasks-per-node=1 --cpus-per-task=1 --time=00:05:00 <cmd>` |
+| Interactive shell | `srun --nodes=1 -ntasks-per-node=1 --cpus-per-task=1 --time=00:15:00 --pty /bin/bash --login` |
+| Reserve allocation | `salloc --nodes=1 -ntasks-per-node=1 --cpus-per-task=1 --time=00:10:00` |
 | Cancel job | `scancel <JOBID>` |
 | Cancel all my jobs | `scancel --me` |
 | Chain jobs | `sbatch --parsable` + `--dependency=afterok:<ID>` |
 | Limit array concurrency | `--array=1-100%4` |
 | Attach to running job | `srun --jobid=<ID> --overlap --pty /bin/bash -l` |
-| Check QOS limits | `sacctmgr show qos workq_qos` |
+| Check QOS limits | `sacctmgr show qos` |
 | Check my accounts | `sacctmgr show user $(whoami) withassoc` |
 
 ---
 
 ## Related Resources
 
-- [Cirrus job scheduling page](https://docs.cirrus.ac.uk/user-documentation/information/job-scheduling/)
-- [Cirrus acceptable use policy](https://docs.cirrus.ac.uk/policies/acceptable_use/)
-- [Cirrus portal (allocation usage)](https://portal.cirrus.ac.uk)
+- [Cirrus job scheduling page](https://docs.cirrus.ac.uk/user-guide/batch/)
 - [Slurm sbatch man page](https://slurm.schedmd.com/sbatch.html)
 - [Slurm srun man page](https://slurm.schedmd.com/srun.html)
 - [Slurm QOS documentation](https://slurm.schedmd.com/qos.html)

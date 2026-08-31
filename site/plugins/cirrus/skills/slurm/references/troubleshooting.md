@@ -12,19 +12,9 @@ These errors appear immediately when running `sbatch` or `srun`.
 **`Unable to allocate resources: Job violates accounting/QOS policy`**
 
 Your project has reached a resource limit. Slurm reserves credits based on **requested**
-resources × **requested** walltime — not actual usage. The reservation is held until the
-job finishes.
+resources × **requested** walltime — not actual usage. This message typically means the
+resources you are requesting do not fit within the specified QoS.
 
-- Wait for running jobs to complete, then resubmit.
-- Set `--time` as close to the expected runtime as possible.
-- Check your project's allocation at the [portal](https://portal.cirrus.ac.uk).
-- See also: `AssocGrpGRESMinutesLimit` in the PENDING section below.
-
-**`error: Invalid generic resource (GRES) specification`**
-
-The `--gpus` or `--gres` value is not valid for the partition. On Cirrus-AI, request GPUs
-with `--gpus=<n>`. Check the [basics guide](https://docs.cirrus.ac.uk/user-documentation/guides/slurm/)
-for the correct syntax per system.
 
 **`Batch job submission failed: Requested node configuration is not available`**
 
@@ -35,13 +25,7 @@ for valid directives on your target system.
 
 **`error: Invalid account or account/partition combination specified`**
 
-The project name in the job script does not match your account. Run:
-
-```bash
-sacctmgr show user $(whoami) withassoc
-```
-
-This shows your valid accounts and the partitions associated with each.
+This typically indicates that you have run out of budget.
 
 ---
 
@@ -58,7 +42,6 @@ has not started.
 | `PartitionTimeLimit` | `--time` exceeds the partition maximum (24 hours). Reduce it, or chain jobs with `--dependency=afterok`. |
 | `ReqNodeNotAvail` | A specific node requested with `--nodelist` is unavailable. Remove the constraint or wait. |
 | `AssocGrpCPUMinutesLimit` | Project CPU-minute allocation limit reached. See submission error fix above. |
-| `AssocGrpGRESMinutesLimit` | Project GPU-minute allocation limit reached. See submission error fix above. |
 | `AssocGrpMemMinutesLimit` | Project memory-minute allocation limit reached. See submission error fix above. |
 | `QOSMaxSubmitJobPerUserLimit` | Too many jobs queued. Wait for some to complete before submitting more. |
 | `JobHoldMaxRequeue` | Job failed to start repeatedly after node faults. Cancel with `scancel` and resubmit. |
@@ -79,8 +62,7 @@ workload into smaller chunks chained with `--dependency=afterok`.
 
 Job was killed by the out-of-memory manager. Options:
 - Reduce the memory footprint of your application.
-- Request more resources. On Cirrus-AI, each additional GPU also allocates an additional
-  Superchip's worth of CPU memory.
+- Request more resources.
 
 **`NODE_FAIL`**
 
