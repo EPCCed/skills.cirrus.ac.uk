@@ -2,26 +2,25 @@
 name: modules
 description: >
   Guide for using the modules system, programming environments, compilers, and profiling tools
-  on Cirrus AI (BriCS) supercomputers (Cirrus-AI and Cirrus 3).
+  on Cirrus UK National Compute Resource.
   Use this skill whenever a user asks about loading modules on Cirrus, the Cray Programming
-  Environment (PrgEnv-gnu, PrgEnv-cray), compiler wrappers (cc, CC, ftn), GCC or NVIDIA
-  compilers, compiler flags for Arm/Grace (neoverse-v2), BriCS-supplied modules (brics/nccl,
-  brics/tmux, etc.), profiling with gprof, Cray perftools, or Nvidia Nsight Systems.
+  Environment (PrgEnv-gnu, PrgEnv-cray, PrgEnv-intel, PrgEnv-aocc), compiler wrappers (cc, CC, ftn),
+  or Cray perftools.
   Also trigger for questions about linking MPI or scientific libraries on Cirrus, or
-  troubleshooting compiler and build issues on the Cray HPE system — even if the user
-  doesn't explicitly say "modules".
+  troubleshooting compiler and build issues on the HPE Cray EX4000 system — even if the user
+  does not explicitly say "modules".
 compatibility: >
-  Cirrus-AI and Cirrus 3. Requires access to an Cirrus login node and the
+  Cirrus. Requires access to an Cirrus login node and the
   Cray Programming Environment module system.
 metadata:
   author: cirrus-sc
   version: "1.0"
-  source_url: https://docs.cirrus.ac.uk/user-documentation/guides/modules/
+  source_url: https://docs.cirrus.ac.uk/user-guide/
 ---
 
 # Modules and Compilers on Cirrus
 
-Both Cirrus-AI and Cirrus 3 are HPE/Cray systems and use the **Cray Programming Environment** for managing compilers, MPI, and scientific libraries through a modular software system.
+Cirrus is an HPE Cray EX4000 system and use the **Cray Programming Environment** for managing compilers, MPI, and scientific libraries through a modular software system.
 
 ---
 
@@ -33,24 +32,11 @@ Both Cirrus-AI and Cirrus 3 are HPE/Cray systems and use the **Cray Programming 
 | `module load <name>` | Load a module into the current session |
 | `module unload <name>` | Unload a module from the current session |
 | `module list` | List all currently loaded modules |
-| `module purge` | Unload all loaded modules |
+| `module restore` | Switch back to default login environment module setup |
 | `module spider <name>` | Search for a module and show details |
 
----
-
-## BriCS-Supplied Modules
-
-BriCS provides the following utility modules (available on AIP1, AIP2, and Cirrus 3 unless noted):
-
-| Module | Description |
-|--------|-------------|
-| `brics/default` | Default user environment (loaded automatically) |
-| `brics/userenv` | Sets `$LOCALDIR`, `$SCRATCHDIR`, and `$TMPDIR` — see the [storage docs](https://docs.cirrus.ac.uk/user-documentation/information/system-storage/) |
-| `brics/emacs` | Emacs text editor |
-| `brics/nano` | nano text editor |
-| `brics/tmux` | tmux terminal multiplexer — reload the module when restarting a terminal; sessions persist |
-| `brics/nccl` | **Required for multi-node GPU workflows.** Provides NCCL (built against `libfabric`) and the NCCL AWS-OFI plugin for Slingshot high-speed network support |
-| `brics/apptainer-multi-node` | Support for multi-node Apptainer jobs — see the [Apptainer multi-node docs](https://docs.cirrus.ac.uk/user-documentation/guides/containers/apptainer-multi-node/) |
+**Gotchas:**
+- Users should never use `module purge` on Cirrus as it will break the Cray Programming Environment setup
 
 ---
 
@@ -59,35 +45,37 @@ BriCS provides the following utility modules (available on AIP1, AIP2, and Cirru
 ### Available environments
 
 ```bash
-module av PrgEnv           # quick list
+module avail PrgEnv           # quick list
 module spider PrgEnv       # detailed view
 ```
 
 ```
-PrgEnv-cray/8.5.0    PrgEnv-gnu/8.5.0
+   PrgEnv-aocc/8.6.0    PrgEnv-cray/8.6.0 (L)    PrgEnv-gnu/8.6.0    PrgEnv-intel/8.6.0
 ```
 
-**`PrgEnv-gnu` is recommended** — good performance, familiar behaviour, all dependencies loaded automatically:
+**`PrgEnv-gnu` is usually recommended** — good performance, familiar behaviour, all dependencies loaded automatically:
 
 ```bash
 module load PrgEnv-gnu
 module list
-# Loads: brics/userenv, brics/default, gcc-native/13.2, craype, craype-arm-grace,
-#        libfabric, craype-network-ofi, cray-libsci, cray-mpich, PrgEnv-gnu
+
+Currently Loaded Modules:
+  1) craype-x86-turin   3) craype-network-ofi       5) xpmem/1.0.1-1.5_1_gfb6998056825   7) epcc-setup-env     9) gcc-native/14.2  11) cray-dsmml/0.3.1   13) cray-libsci/25.03.0
+  2) libfabric/2.3.1    4) perftools-base/25.03.0   6) cse_env/0.2                       8) load-epcc-module  10) craype/2.7.34    12) cray-mpich/8.1.32  14) PrgEnv-gnu/8.6.0
 ```
 
 Key components loaded by `PrgEnv-gnu`:
 
 | Module | Purpose |
 |--------|---------|
-| `gcc-native/13.2` | GCC 13.2 compiler suite |
+| `gcc-native/14.2` | GCC 14.2 compiler suite |
 | `libfabric` | Communication library for Slingshot 11 high-speed interconnect |
 | `cray-libsci` | Scientific and math libraries (BLAS, LAPACK, etc.) |
 | `cray-mpich` | MPI libraries |
 
 ### Cray compiler wrappers
 
-With a `PrgEnv` loaded, use the **Cray compiler wrappers** rather than invoking GCC directly:
+With a `PrgEnv` loaded, use the **Cray compiler wrappers** rather than invoking the compiler directly:
 
 | Wrapper | Language | GCC equivalent |
 |---------|----------|----------------|
@@ -106,63 +94,24 @@ ftn -craype-verbose -o hello hello.f90
 
 ---
 
-## Compiler Options
-
-### Targeting the NVIDIA Grace Superchip (Arm Neoverse V2)
-
-Use `-mcpu=neoverse-v2` to target the Grace CPU architecture. Note this differs from x86 (`-march`):
-
-```bash
-cc -mcpu=neoverse-v2 -O3 mycode.c -o mycode
-```
-
-For further tuning guidance see the [NVIDIA Grace Performance Tuning Guide](https://docs.nvidia.com/grace-perf-tuning-guide/index.html).
-
----
-
-## NVIDIA Compilers
-
-Load just the NVIDIA compiler suite (without a full programming environment):
-
-```bash
-module load nvidia
-nvc --version      # C
-nvc++ --version    # C++
-nvfortran --version
-# All target: linuxarm64, aarch64, neoverse-v2
-```
-
-> **Note:** Loading only `module load nvidia` does **not** load MPI libraries automatically. For MPI, load a full `PrgEnv` instead, or see the [MPI guide](https://docs.cirrus.ac.uk/user-documentation/guides/mpi/).
-
----
-
 ## Profiling Tools
 
 ### gprof
 
-Available without loading any modules:
+Available once PrgEnv-gnu is loaded:
 
 ```bash
-gprof ./a.out
+gprof ./my_application.x
 ```
 
 ### Cray Perftools
 
 ```bash
 module load perftools-base
-pat_run ./a.out
+pat_run ./my_application.x
 ```
 
 Full docs: [HPE Cray Performance Tools](https://cpe.ext.hpe.com/docs/latest/performance-tools/index.html)
-
-### NVIDIA Nsight Systems
-
-```bash
-module load cudatoolkit
-nsys profile ./a.out
-```
-
-Full docs: [NVIDIA Nsight Systems User Guide](https://docs.nvidia.com/nsight-systems/UserGuide/index.html)
 
 ---
 
@@ -171,20 +120,18 @@ Full docs: [NVIDIA Nsight Systems User Guide](https://docs.nvidia.com/nsight-sys
 | Goal | Command |
 |------|---------|
 | Recommended build environment | `module load PrgEnv-gnu` |
-| Compile C | `cc -mcpu=neoverse-v2 -O3 myfile.c` |
-| Compile C++ | `CC -mcpu=neoverse-v2 -O3 myfile.cpp` |
-| Compile Fortran | `ftn -mcpu=neoverse-v2 -O3 myfile.f90` |
+| Compile C | `cc -O3 myfile.c` |
+| Compile C++ | `CC -O3 myfile.cpp` |
+| Compile Fortran | `ftn -O3 myfile.f90` |
 | Debug wrapper flags | `cc -craype-verbose ...` |
-| Multi-node GPU jobs | `module load brics/nccl` |
 | Profile with Cray tools | `module load perftools-base` → `pat_run` |
-| Profile with NVIDIA tools | `module load cudatoolkit` → `nsys` |
-| Spack builds | See [Spack guide](https://docs.cirrus.ac.uk/user-documentation/guides/spack/) for compiler config |
+| Spack builds | See [Spack guide](https://docs.cirrus.ac.uk/software-tools/spack/)  |
 
 ---
 
 ## Related Resources
 
-- [Cirrus MPI guide](https://docs.cirrus.ac.uk/user-documentation/guides/mpi/)
-- [Cirrus Spack guide](https://docs.cirrus.ac.uk/user-documentation/guides/spack/)
+- [Cirrus software environment guide](https://docs.cirrus.ac.uk/user-guide/sw-environment/)
+- [Cirrus application developer environment guide](https://docs.cirrus.ac.uk/user-guide/development/)
+- [Cirrus Spack guide](https://docs.cirrus.ac.uk/software-tools/spack/)
 - [Cray Programming Environment docs](https://cpe.ext.hpe.com/docs/latest)
-- [NVIDIA Grace Performance Tuning Guide](https://docs.nvidia.com/grace-perf-tuning-guide/index.html)

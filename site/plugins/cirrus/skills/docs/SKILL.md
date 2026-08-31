@@ -1,42 +1,39 @@
 ---
-name: brics-hpc-ai-code
+name: cirrus-hpc-cai-ode
 description: >
   Guidance for writing, reviewing, and running AI-generated code responsibly on
-  Bristol Centre for Supercomputing (BriCS) shared HPC resources: Cirrus-AI
-  and Cirrus 3. Use this skill whenever generating, adapting, or debugging
-  code intended to run on BriCS facilities, writing Slurm job scripts, managing
-  storage, installing software, or ensuring compliance with BriCS policies.
-license: Proprietary. See https://docs.cirrus.ac.uk/policies/ for terms.
+  Cirrus NCR UK national HPC resource. Use this skill whenever generating, adapting, or debugging
+  code intended to run on Cirrus, writing Slurm job scripts, managing
+  storage, installing software, or ensuring compliance with EIDF policies.
+license: Proprietary. See https://edinburgh-international-data-facility.ed.ac.uk/about/policies for terms.
 compatibility: >
-  Designed for use with BriCS facilities (Cirrus-AI Phase 1/2, Cirrus 3
-  Grace/MACS). Assumes Linux aarch64 (Arm64) on Cirrus-AI and Cirrus 3
-  Grace; x86_64 on Cirrus 3 MACS. Requires Slurm, SSH/Clifton access.
+  Designed for use with Cirrus NCR. Assumes Linux x86_64. Requires Slurm, SSH access.
 metadata:
-  author: Bristol Centre for Supercomputing (BriCS)
+  author: EPCC
   docs: https://docs.cirrus.ac.uk/
-  support: https://support.cirrus.ac.uk
-  status: https://status.cirrus.ac.uk
+  support: support@cirrus.ac.uk
+  status: https://www.cirrus.ac.uk/support-access/status/
 ---
 
-# BriCS HPC Responsible AI-Generated Code Skill
+# Cirrus NCR HPC Responsible AI-Generated Code Skill
 
 This skill guides agents in producing correct, safe, and policy-compliant code
-for the Bristol Centre for Supercomputing (BriCS) HPC facilities.
+for the Cirrus HPC facility.
 
 ---
 
 ## Core Principles
 
-Always follow these rules when generating or suggesting code for BriCS systems.
+Always follow these rules when generating or suggesting code for Cirrus system.
 
 | Principle | Rule |
 |---|---|
 | **Shared resource respect** | Never generate code that runs heavy workloads directly on login nodes |
-| **Accurate resource requests** | Always estimate realistic `--time`, `--gpus`, `--ntasks` in job scripts |
+| **Accurate resource requests** | Always estimate realistic `--time`, `--nodes`, `--tasks-per-node`, `--cpus-per-task` in job scripts |
 | **Storage awareness** | Use the correct storage area; never assume data persists after project end |
-| **Policy compliance** | All generated code must be consistent with the BriCS Acceptable Use Policy |
-| **Architecture awareness** | Cirrus-AI and Cirrus 3 Grace are **aarch64 (Arm64)**; MACS has mixed archs |
-| **Verify before submit** | Always review AI-generated scripts before `sbatch`—especially resource flags |
+| **Policy compliance** | All generated code must be consistent with the EIDF Terms and Conditions of Access |
+| **Architecture awareness** | Cirrus is an RHEL **x86_64** HPE Cray EX4000 system. More details at: https://docs.cirrus.ac.uk/user-guide/hardware/  |
+| **Verify before submit** | Always review AI-generated scripts before `sbatch` — especially resource flags |
 
 ---
 
@@ -44,104 +41,108 @@ Always follow these rules when generating or suggesting code for BriCS systems.
 
 | Task | Correct approach |
 |---|---|
-| Run a short test command | `srun --time=00:05:00 [--gpus=1] <cmd>` |
+| Run a short test command | `srun --time=00:05:00 [--nodes=1 --tasks-per-node=1] <cmd>` |
 | Run a batch workload | Write a script; submit with `sbatch` |
 | Install Python packages | Conda (Miniforge) or `uv`; never `pip install --user` in $HOME |
-| Share data with project members | Write to `$PROJECTDIR` |
-| Share data with all users | Write to `$PROJECTDIR_PUBLIC` |
-| Temporary/intermediate data | Use `$SCRATCHDIR` (auto-deleted after 60 days on Cirrus 3) |
-| Fast in-job scratch | Use `$LOCALDIR` (wiped at job end) |
-| Long job (>24h) | Break into chained jobs with `--dependency=afterok:<JOBID>` |
-| Check quota | `lfs quota -hp $(lfs project -d $SCRATCHDIR \| awk '{print $1}') $SCRATCHDIR` |
+| Share data with project members | Write to /epccfs/<project ID>/<project ID>/shared |
+| Share data with all users | Write to /epccfs/<project ID>/shared |
+| Check quota on /epccfs | `df -h <dir>` |
 
 ---
 
 ## Slurm Job Scripts
 
-### Cirrus-AI (GPU — GH200)
+### Cirrus
 
-Each GPU requested allocates **1 Grace Hopper Superchip** = 1 GH200 GPU + 72 CPU cores + 115 GiB RAM.
+#### Checking for valid budget codes
+
+You can check in SAFE by selecting Login accounts from the menu, select the login account you want to query.
+
+Under Login account details you will see each of the budget codes you have access to listed e.g. e123 resources and then under Resource Pool to the right of this, a note of the remaining budget in coreh.
+
+When logged in to the machine you can also use the command
+
+```
+sacctmgr show assoc where user=$LOGNAME format=account,user,maxtresmins
+```
+
+This will list all the budget codes that you have access to e.g.
+
+```
+   Account       User   MaxTRESMins
+---------- ---------- -------------
+      e123      userx         cpu=0
+ e123-test      userx
+
+```
+
+This shows that userx is a member of budgets e123 and e123-test. However, the cpu=0 indicates that the e123 budget is empty or disabled. This user can submit jobs using the e123-test budget.
+
+#### Serial job
 
 ```bash
 #!/bin/bash
-#SBATCH --job-name=my_job
-#SBATCH --output=my_job_%j.out
-#SBATCH --gpus=1                # Required: always specify GPU resource
-#SBATCH --time=01:00:00         # Required: set a realistic time limit (max 24h)
 
-module load cray-python         # Or activate your Conda/venv environment
-python3 my_script.py
+# Slurm job options (name, compute nodes, job time)
+#SBATCH --job-name=Example_Serial_Job
+#SBATCH --time=0:20:0                     # Required: maximum time is 2 days in standard partition
+#SBATCH --ntasks=1                        # Required: set a single task
+
+#SBATCH --account=[budget code]           # Required: replace "[budget code]" with the correct budget for the job
+#SBATCH --partition=standard              # Required: using standard memory nodes, would use "highmem" for high memory nodes
+#SBATCH --qos=standard                    # Required: runtime 2 days or less, would use "long" for jobs up to 4 days
+
+# Change to the submission directory
+cd $SLURM_SUBMIT_DIR
+
+# Enforce threading to 1 in case underlying libraries are threaded
+export OMP_NUM_THREADS=1
+
+# Launch the serial job
+srun ./my_serial_executable.x
 ```
 
-**Gotchas for Cirrus-AI:**
-- You MUST specify `--gpus` (or `--gpus-per-*`). Jobs without GPU directives will fail.
-- The default partition is `workq`. Do not specify a partition unless you have a reason.
-- Maximum walltime is **24 hours**. For longer jobs, use `--dependency=afterok:<JOBID>`.
-- Project GPU limit: **32 GPUs** across all running jobs (`32gpu_qos`).
+#### Parallel MPI job
 
-### Cirrus 3 (CPU — Grace)
-
-```bash
+```
 #!/bin/bash
-#SBATCH --job-name=my_cpu_job
-#SBATCH --output=my_cpu_job_%j.out
-#SBATCH --ntasks=4
-#SBATCH --time=02:00:00         # Max 24h on grace partition
 
-module load cray-python
-srun python3 my_script.py
+#SBATCH --job-name=Example_MPI_Job
+#SBATCH --time=0:20:0                 # Required: maximum time is 2 days in standard partition
+#SBATCH --nodes=2.                    # Required: set the number of nodes you want to use
+#SBATCH --tasks-per-node=288          # Required: set the number of cores per node to use per node
+#SBATCH --cpus-per-task=1             # Required: set the stride between MPI process placement, usually set to 288 divided by the value of `--tasks-per-node`
+#SBATCH --exclusive                   # Required: when using more than 1 node the `--exclusive` option must be specified
+
+#SBATCH --account=[budget code].      # Required: replace "[budget code]" with the correct budget for the job
+#SBATCH --partition=standard          # Required: using standard memory nodes, would use "highmem" for high memory nodes
+#SBATCH --qos=standard.               # Required: runtime 2 days or less, would use "long" for jobs up to 4 days
+
+export OMP_NUM_THREADS=1              # Required: prevents any threaded system libraries from automatically using threading
+
+# Launch the parallel job
+#   srun picks up the process count and distribution from the sbatch options
+srun --hint=nomultithread --distribution=block:block ./my_mpi_executable.x
 ```
 
-### Multi-step / parallel job steps
-
-```bash
-# Run two job steps concurrently on separate GPUs
-srun --ntasks=1 --gpus=1 --exclusive step_a.sh &
-srun --ntasks=1 --gpus=1 --exclusive step_b.sh &
-wait
-```
-
-### Chaining long workloads (>24h)
-
-```bash
-# Chain jobs that save/restore state
-JOBID_1=$(sbatch --parsable job_part1.sh)
-JOBID_2=$(sbatch --parsable --dependency=afterok:${JOBID_1} job_part2.sh)
-```
+**Gotchas:**
+- `module load cray-mpich` is not needed in job scripts on Cirrus
 
 ---
 
 ## Storage Spaces
 
-All storage is **working storage — not backed up**. Data is deleted at project end.
+All storage is **working storage — not backed up**. Data is typically deleted 1 month after project end.
 
-| Variable | Path | Purpose | Quota (Cirrus-AI) | Retention |
+| Path | Purpose | Available on | Retention |
 |---|---|---|---|---|
-| `$HOME` | `/home/<PROJECT>/<USER>.<PROJECT>` | Config files, scripts, job outputs | 100 GiB | Project end |
-| `$SCRATCHDIR` | `/scratch/<PROJECT>/<USER>.<PROJECT>` | Intermediate job data, containers | 5 TiB | 60 days (i3) / Project end (iAI) |
-| `$PROJECTDIR` | `/projects/<PROJECT>` | Shared datasets, shared environments | 200 TiB | Project end |
-| `$PROJECTDIR_PUBLIC` | `/projects/public/<PROJECT>` | Data readable by all users | 200 TiB | Project end |
-| `$LOCALDIR` | `/local/user/<UID>` | Fast RAM-backed in-job scratch | 48 GiB (compute) | End of job/session |
+| `/home/<PROJECT>/<PROJECT>/<USER>` | Critical data and source files | Login nodes only | Project end + 1 month |
+| `/epccfs/<PROJECT>/<PROJECT>/<USER>`  | Data required for jobs running on the system | Login nodes, Compute nodes | Project end + 1 month |
 
 **Critical reminders:**
-- **Never use `/tmp` directly.** `/tmp` is node-local, may have very limited space, and is not reliably available or cleaned up across the cluster. Always reference storage locations through their environment variables (`$SCRATCHDIR`, `$LOCALDIR`, etc.) and use `set -eu` at the top of job scripts to catch unset variables early:
-
-```bash
-#!/bin/bash
-set -eu   # Exit on error (-e); treat unset variables as errors (-u)
-
-WORKDIR="${SCRATCHDIR}/myjob_${SLURM_JOB_ID}"
-mkdir -p "${WORKDIR}"
-
-# ... your work here ...
-
-# Explicitly clean up at end of job — do not rely on automated deletion
-rm -rf "${WORKDIR}"
-```
-
 - `$HOME` is for scripts and configs — **not large datasets**.
-- `$LOCALDIR` on compute nodes is a **tmpfs RAM disk** — very fast but limited.
-- Never assume `$LOCALDIR` data survives between jobs.
+- `$TMPDIR` on compute nodes is a **tmpfs RAM disk** — very fast but limited. Its use reduces available memory on a node.
+- Never assume `$TMPDIR` data survives between jobs.
 - Backup important results off-system before the project end date.
 
 ---
@@ -156,80 +157,30 @@ Login nodes are **shared** and must not be used for compute-intensive or long-ru
 | Compiling small programs | Running data preprocessing pipelines |
 | Submitting/monitoring jobs | Running benchmarks or tests |
 | File transfer and compression | Long `python` / `bash` loops |
-| Building containers | Using `watch` with `squeue -i` repeatedly |
 
-> Using `squeue -i` or `watch squeue` excessively disrupts **all users** and is a breach of the Acceptable Use Policy. Use `squeue --me` once to check, or set a reasonable interval.
+> Using `squeue -i` or `watch squeue` excessively disrupts **all users**. Use `squeue --me` once to check, or set a reasonable interval.
 
 ---
 
 ## Software and Environments
 
-### Python — Recommended approach
-
-```bash
-# Install Miniforge (once per user)
-cd $HOME
-curl --location --remote-name \
-  "https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-$(uname)-$(uname -m).sh"
-bash Miniforge3-$(uname)-$(uname -m).sh
-rm Miniforge3-$(uname)-$(uname -m).sh
-
-# Activate (each session — do NOT use conda init)
-source ~/miniforge3/bin/activate
-
-# Create and use isolated environments
-conda create -n myenv python=3.11
-conda activate myenv
-conda install 
-```
-
-**Gotchas:**
-- Do NOT run `conda init` — it modifies shell startup scripts and causes problems.
-- Do NOT install packages in the base Conda environment.
-- Do NOT use `pip install --user`; it installs into `$HOME/.local` which is shared across architectures (aarch64 and x86_64 on Cirrus 3) — use venvs instead.
-- Cirrus-AI and Cirrus 3 Grace are **aarch64**. Many PyPI wheels do not support aarch64; use conda-forge or build from source.
-
-### Architecture check in scripts
-
-```bash
-# In .bashrc or setup scripts, guard architecture-specific code:
-if [ "$(arch)" == "x86_64" ]; then
-    source ~/miniforge3/bin/activate  # x86_64 env
-elif [ "$(arch)" == "aarch64" ]; then
-    source ~/miniforge3_arm/bin/activate  # aarch64 env
-fi
-```
-
 ### Modules
 
 ```bash
-module avail          # List available modules
+module avail              # List available modules
 module load cray-python   # Load Cray Python (pre-installed)
 ```
 
 ---
 
-## Connecting to BriCS (Clifton + SSH)
+## Connecting to Cirrus
 
 ```bash
-# Install Clifton (Linux)
-curl -L https://github.com/cirrus-sc/clifton/releases/latest/download/clifton-linux-musl-x86_64 -o clifton
-chmod u+x clifton && mv clifton ~/.local/bin/
 
-# Authenticate (required daily)
-clifton auth
-
-# Write SSH config (only needed when added to a new project)
-clifton ssh-config write
-
-# Connect
-ssh .aip2.cirrus    # Cirrus-AI Phase 2
-ssh .3.cirrus       # Cirrus 3
 ```
 
 **Gotchas:**
-- SSH certificates are valid for **12 hours only** — run `clifton auth` each day.
-- Login nodes are assigned randomly; you cannot request a specific login node.
+- Login nodes are assigned randomly; you should not usually request a specific login node.
 - Do NOT leave persistent `tmux`/`screen` sessions on login nodes — they violate security policy and may be terminated without warning.
 
 ---
@@ -239,60 +190,41 @@ ssh .3.cirrus       # Cirrus 3
 ```bash
 squeue --me                        # View your running/pending jobs
 sacct                              # View current and completed jobs
-scancel                     # Cancel a job
-salloc --gpus=1 --time=00:30:00    # Reserve a node interactively (always set --time)
+scancel                            # Cancel a job
+salloc --ntasks=1 --time=00:30:00  # Reserve a compute core interactively (always set --time)
 ```
 
 **Gotchas:**
 - Always cancel `salloc` allocations with `scancel <JOBID>` when finished.
-- Use `--time-min` and `--time` together to allow backfill scheduling.
-- Batch array jobs (`--array`) can strain the scheduler — prefer chained job steps where possible.
+- Use `--time-min` and `--time` together to enable more flexible backfill scheduling.
 
 ---
 
 ## Responsible AI-Generated Code Checklist
 
-Before submitting any AI-generated code or job script to BriCS:
+Before submitting any AI-generated code or job script to Cirrus:
 
-- [ ] **Resource requests are realistic** — `--time`, `--gpus`, `--ntasks` match your actual workload
+- [ ] **Resource requests are realistic** — `--time`, `--nodes` match your actual workload
 - [ ] **No heavy computation on the login node** — all intensive work is inside a job script
-- [ ] **Correct storage variable used** — large inputs/outputs go to `$SCRATCHDIR` or `$PROJECTDIR`, not `$HOME`
-- [ ] **Architecture is correct** — code compiles/runs on aarch64 if targeting Cirrus-AI or Cirrus 3 Grace
-- [ ] **Python packages are in a virtual environment** — not installed globally or with `--user`
+- [ ] **Correct storage variable used** — inputs/outputs go to `/epccfs`, not `/home`
+- [ ] **Architecture is correct** — code compiles/runs on x86_64
 - [ ] **No persistent sessions** — `tmux`/`screen` used only within a job, not left on login nodes
 - [ ] **Quota checked** — storage usage is within limits before staging large datasets
 - [ ] **Data backed up** — important results are copied off-system; nothing is assumed to persist
-- [ ] **Policy compliance** — usage is consistent with the BriCS Acceptable Use Policy
+- [ ] **Policy compliance** — usage is consistent with the EIDF Terms and Conditions of Access
 - [ ] **Job output reviewed** — check `sacct` or output files after a job completes
 
----
-
-## Common Gotchas Summary
-
-| Mistake | Consequence | Fix |
-|---|---|---|
-| No `--gpus` on Cirrus-AI | Job fails | Always include `--gpus=1` (or more) |
-| Running compute on login node | Account suspension | Use `sbatch`/`srun` |
-| `pip install --user` across archs | Package conflicts | Use Conda env or venv |
-| `conda init` in `.bashrc` | Shell startup failures | Use `source ~/miniforge3/bin/activate` |
-| Leaving data in `$SCRATCHDIR` for >60 days (Cirrus 3) | Data deleted | Move to `$PROJECTDIR` or back up |
-| Persistent `tmux` on login node | Session terminated | Submit long jobs via Slurm |
-| Using `watch` with any Slurm command | Disrupts scheduler for all users; AUP violation | Never combine `watch` with `squeue`, `sinfo`, `sacct`, or similar — check once manually |
-| Using `/tmp` directly in scripts | `/tmp` is node-local, not guaranteed to exist, and not cleaned up reliably | Use `$SCRATCHDIR`, `$LOCALDIR`, or a subdirectory of a known env variable |
-| Leaving temp files in `$SCRATCHDIR` or `$LOCALDIR` after a job | Wastes quota; may cause future jobs to fail on space | Explicitly delete temp files at the end of your job script |
-| Raising a support ticket for a known outage | Unnecessary load on the helpdesk | Always check https://status.cirrus.ac.uk before submitting a ticket |
-| Forgetting `clifton auth` | SSH fails | Run daily before connecting |
 
 ---
 
 ## Further Reading
 
 - Full documentation: https://docs.cirrus.ac.uk/
-- Slurm job management: https://docs.cirrus.ac.uk/user-documentation/guides/slurm/
-- Storage spaces: https://docs.cirrus.ac.uk/user-documentation/information/system-storage/
-- Job scheduling & limits: https://docs.cirrus.ac.uk/user-documentation/information/job-scheduling/
-- Python guide: https://docs.cirrus.ac.uk/user-documentation/guides/python/
-- Login guide: https://docs.cirrus.ac.uk/user-documentation/guides/login/
-- Policies: https://docs.cirrus.ac.uk/policies/
-- Support: https://support.cirrus.ac.uk
-- Service status: https://status.cirrus.ac.uk
+- Slurm job management: https://docs.cirrus.ac.uk/user-guide/batch/
+- Storage spaces: https://docs.cirrus.ac.uk/user-guide/data/
+- Job scheduling & limits: https://docs.cirrus.ac.uk/user-guide/batch/#resource-limits
+- Python guide: https://docs.cirrus.ac.uk/user-guide/python/
+- Login guide: https://docs.cirrus.ac.uk/user-guide/connecting/
+- Policies: https://edinburgh-international-data-facility.ed.ac.uk/about/policies
+- Support: https://www.cirrus.ac.uk/support-access/user-support/
+- Service status: https://www.cirrus.ac.uk/support-access/status/
