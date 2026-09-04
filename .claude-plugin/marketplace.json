@@ -1,24 +1,24 @@
 {
   "name": "cirrus-skills",
   "owner": {
-    "name": "Cirrus",
+    "name": "EPCC",
     "email": "support@cirrus.ac.uk"
   },
   "metadata": {
-    "description": "AI agent skills for Cirrus HPC systems",
+    "description": "AI agent skills for the Cirrus HPC system",
     "version": "1.0"
   },
   "plugins": [
     {
       "name": "cirrus",
-      "description": "AI agent skills for Cirrus HPC systems",
+      "source": "./plugins/cirrus",
+      "description": "AI agent skills for the Cirrus HPC",
       "version": "1.0",
       "author": {
-        "name": "Cirrus"
+        "name": "EPCC"
       },
-      "source": "./site/plugins/cirrus",
       "homepage": "https://skills.cirrus.ac.uk",
-      "repository": "https://github.com/aturner-epcc/skills.cirrus.ac.uk"
+      "repository": "https://github.com/EPCCed/skills.cirrus.ac.uk"
     }
   ]
 }
