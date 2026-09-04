@@ -21,8 +21,6 @@ the environment from scratch every session.
 | [Slurm](site/plugins/cirrus/skills/slurm/SKILL.md) | Submit, monitor and manage HPC jobs on Cirrus using the Slurm workload manager | `https://skills.cirrus.ac.uk/skills/slurm/SKILL.md` |
 | [Python](site/plugins/cirrus/skills/python/SKILL.md) | Install and manage Python environments on Cirrus using Conda (Miniforge), uv, or Cray Python | `https://skills.cirrus.ac.uk/skills/python/SKILL.md` |
 | [Modules](site/plugins/cirrus/skills/modules/SKILL.md) | Use the modules system, Cray Programming Environments, compiler wrappers (cc, CC, ftn), GNU and NVIDIA compilers, and profiling tools on Cirrus | `https://skills.cirrus.ac.uk/skills/modules/SKILL.md` |
-| [Spack](site/plugins/cirrus/skills/spack/SKILL.md) | Install, configure, and use Spack to build HPC software on Cirrus-AI and Cirrus 3, including the buildit config repository and targeting neoverse_v2 / aarch64 | `https://skills.cirrus.ac.uk/skills/spack/SKILL.md` |
-| [Containers](site/plugins/cirrus/skills/containers/SKILL.md) | Run containers on Cirrus using Podman-HPC and Apptainer. Covers image management, GPU access, and multi-node MPI/NCCL workloads over Slingshot 11 | `https://skills.cirrus.ac.uk/skills/containers/SKILL.md` |
 | [MPI](site/plugins/cirrus/skills/mpi/SKILL.md) | Use MPI on Cirrus with Cray MPICH or OpenMPI. Covers PMI types, srun --mpi flags, Slingshot 11 performance, and why mpirun/mpiexec must not be used | `https://skills.cirrus.ac.uk/skills/mpi/SKILL.md` |
 
 ---
@@ -34,7 +32,7 @@ the environment from scratch every session.
 Add the Cirrus marketplace:
 
 ```
-/plugin marketplace add https://github.com/aturner-epcc/skills.cirrus.ac.uk
+/plugin marketplace add https://skills.cirrus.ac.uk
 ```
 
 Install the `cirrus` plugin from the marketplace:
@@ -71,20 +69,16 @@ View skills provided by Cirrus plugin:
 /skills
 ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   Skills
-  9 skills · Space to cycle, Enter to save, / to search, t to sort, Esc to cancel
+  5 skills · Space to cycle, Enter to save, / to search, t to sort, Esc to cancel
 
   ╭──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
   │ ⌕ Search skills…                                                                                                         │
   ╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
   ❯ 🔒 on         cirrus:docs · plugin · ~100 tok · locked by plugin
-    🔒 on         cirrus:containers · plugin · ~200 tok · locked by plugin
-    🔒 on         cirrus:cuda · plugin · ~190 tok · locked by plugin
     🔒 on         cirrus:modules · plugin · ~180 tok · locked by plugin
     🔒 on         cirrus:mpi · plugin · ~170 tok · locked by plugin
-    🔒 on         cirrus:nccl · plugin · ~210 tok · locked by plugin
     🔒 on         cirrus:python · plugin · ~150 tok · locked by plugin
     🔒 on         cirrus:slurm · plugin · ~190 tok · locked by plugin
-    🔒 on         cirrus:spack · plugin · ~200 tok · locked by plugin
 
   Plugin skills are managed via /plugin
 
@@ -97,8 +91,8 @@ Tested on Codex CLI `0.147.0`.
 Add the Cirrus plugin marketplace:
 
 ```cirrus-session
-$ codex plugin marketplace add aturner-epcc/skills.cirrus.ac.uk
-Added marketplace `cirrus-skills` from https://github.com/aturner-epcc/skills.cirrus.ac.uk.git.
+$ codex plugin marketplace add https://skills.cirrus.ac.uk
+Added marketplace `cirrus-skills` from https://skills.cirrus.ac.uk.git.
 Installed marketplace root: .../marketplaces/cirrus-skills
 ```
 
@@ -107,7 +101,7 @@ Install the `cirrus` plugin from the marketplace:
 ```cirrus-session
 $ codex plugin add cirrus@cirrus-skills
 Added plugin `cirrus` from marketplace `cirrus-skills`.
-Installed plugin root: .../cirrus-skills/cirrus/1.0.0
+Installed plugin root: ../cirrus-skills/cirrus/1.0.0
 ```
 
 ### Cursor
@@ -117,8 +111,8 @@ Tested on Cursor CLI `2026.08.04-aaa8809`.
 Add the Cirrus plugin marketplace:
 
 ```cirrus-session
-$ agent plugin marketplace add https://github.com/aturner-epcc/skills.cirrus.ac.uk
-Fetching plugins from https://github.com/aturner-epcc/skills.cirrus.ac.uk...
+$ agent plugin marketplace add https://skills.cirrus.ac.uk
+Fetching plugins from https://skills.cirrus.ac.uk...
 ✓ Added marketplace cirrus-skills (1 plugin)
   cirrus - AI agent skills for Cirrus HPC systems
 Tip: use /plugins in interactive mode to install plugins from this marketplace.
@@ -155,7 +149,7 @@ Install the `cirrus` plugin from the marketplace:
  Plugins: 1
  Installed: 1 (cirrus)
  Indexing: Last indexed 2026-08-11 14:14 UTC
- Source: https://github.com/aturner-epcc/skills.cirrus.ac.uk
+ Source: https://skills.cirrus.ac.uk
 
   → Browse plugins
     Remove marketplace
@@ -208,7 +202,7 @@ Install the `cirrus` plugin from the marketplace:
 
  Marketplace: cirrus-skills
 
- Skills: 9 (containers, cuda, brics-hpc-ai-code, modules, mpi, nccl, python, slurm, spack)
+ Skills: 5 (docs, modules, mpi, python, slurm)
 
   → Install for you (user scope)
     Install for all collaborators on this repository (project scope)
@@ -225,7 +219,7 @@ Tested on Antigravity CLI `1.1.12`.
 Install the `cirrus` plugin from the Cirrus Skills repository: 
 
 ```cirrus-session
-$ agy plugin install https://github.com/aturner-epcc/skills.cirrus.ac.uk/site
+$ agy plugin install https://skills.cirrus.ac.uk
 $ agy plugin enable cirrus
 ```
 

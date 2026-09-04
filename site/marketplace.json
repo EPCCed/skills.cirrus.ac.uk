@@ -1,6 +1,6 @@
 {
   "name": "Cirrus AI Skills",
-  "description": "AI agent skills for Cirrus HPC systems",
+  "description": "AI agent skills for the Cirrus HPC system",
   "url": "https://skills.cirrus.ac.uk",
   "skills": [
     {
@@ -10,7 +10,7 @@
     },
     {
       "name": "Python",
-      "description": "Install and manage Python environments on Cirrus using Conda (Miniforge), uv, or Cray Python. Covers virtual environments, building aarch64 packages from source, compiler flags, mpi4py.",
+      "description": "Install and manage Python environments on Cirrus.",
       "url": "https://skills.cirrus.ac.uk/plugins/cirrus/skills/python/SKILL.md"
     },
     {
@@ -19,18 +19,8 @@
       "url": "https://skills.cirrus.ac.uk/plugins/cirrus/skills/modules/SKILL.md"
     },
     {
-      "name": "Spack",
-      "description": "Install, configure, and use Spack to build HPC software on Cirrus. Covers the Cirrus config, Spack environments, concretizing, installing",
-      "url": "https://skills.cirrus.ac.uk/plugins/cirrus/skills/spack/SKILL.md"
-    },
-    {
-      "name": "Containers",
-      "description": "Run containers on Cirrus using Apptainer (formerly Singularity). Covers pulling, building, and migrating images, single-node and multi-node MPI workloads over Slingshot 11.",
-      "url": "https://skills.cirrus.ac.uk/plugins/cirrus/skills/containers/SKILL.md"
-    },
-    {
       "name": "MPI",
-      "description": "Use MPI on Cirrus with Cray MPICH, OpenMPI, or conda-installed MPI. Covers PrgEnv loading, PMI types (cray_shasta, pmi2, pmix), srun --mpi flags, libfabric and Slingshot 11 performance, and why mpirun/mpiexec must not be used.",
+      "description": "Use MPI on Cirrus with Cray MPICH. Covers PrgEnv loading, PMI types (cray_shasta, pmi2, pmix), srun --mpi flags, libfabric and Slingshot 11 performance, and why mpirun/mpiexec must not be used.",
       "url": "https://skills.cirrus.ac.uk/plugins/cirrus/skills/mpi/SKILL.md"
     }
   ]
