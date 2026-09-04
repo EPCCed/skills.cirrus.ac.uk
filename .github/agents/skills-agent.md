@@ -15,7 +15,7 @@ A skill is a plain Markdown file that gives an AI agent the knowledge and rules 
 Skills follow the [AgentSkills specification](https://agentskills.io/specification). Plugins are collections of related skills and are available to install through a plugin marketplace; both are defined [here](https://code.claude.com/docs/en/plugin-marketplaces).
 
 ```
-site/skills/
+site/plugins/cirrus/skills/
   <skill-name>/
     SKILL.md           # Required — primary skill file with YAML frontmatter
     references/        # Optional — supplementary reference files
@@ -35,8 +35,7 @@ Examples:
 | Skill topic | Directory | Primary file |
 |---|---|---|
 | Slurm job management | `site/skills/slurm/` | `site/skills/slurm/SKILL.md` |
-| Python virtual environments | `site/skills/python-venv/` | `site/skills/python-venv/SKILL.md` |
-| MPI profiling | `site/skills/mpi-profiling/` | `site/skills/mpi-profiling/SKILL.md` |
+| Python | `site/skills/python/` | `site/skills/python/SKILL.md` |
 
 ---
 
@@ -56,7 +55,7 @@ compatibility: >
   <Environment requirements — intended system, required tools, network
   access needs, etc.>
 metadata:
-  author: cirrus-sc
+  author: EPCC
   version: "1.0"
   source_url: https://docs.cirrus.ac.uk/<path-to-source-page>/
   supplementary_urls:            # optional — list additional docs pages
@@ -92,16 +91,16 @@ Keep `SKILL.md` under 500 lines. Move detailed reference material to `references
 
 ## Adding a new plugin (group of skills)
 
-Plugins are collections of related skills. Each plugin must have its own entry in `./site/.claude-plugin/marketplace.json` and a corresponding folder in `./site/plugins/`. For example, an "cirrus3" plugin would have:
+Plugins are collections of related skills. Each plugin must have its own entry in `./site/.claude-plugin/marketplace.json` and a corresponding folder in `./site/plugins/`. For example, an "cirrus" plugin would have:
 
 - An entry in `./site/.claude-plugin/marketplace.json` `plugins` array:
 
 ```json
 {
-  "name": "cirrus3",
+  "name": "cirrus",
   "description": "AI agent skills for Cirrus 3 HPC system",
   "version": "1.0.0",
-  "source": "./plugins/cirrus3"
+  "source": "./plugins/cirrus"
 }
 ```
 
@@ -109,22 +108,22 @@ Plugins are collections of related skills. Each plugin must have its own entry i
 
 ```json
 {
-  "name": "cirrus3",
-  "description": "AI agent skills for Cirrus 3 HPC system",
+  "name": "cirrus",
+  "description": "AI agent skills for Cirrus HPC system",
   "version": "1.0.0"
 }
 ```
 
-- A folder `./site/plugins/cirrus3/` containing:
+- A folder `./site/plugins/cirrus/` containing:
   - `.claude-plugin/plugin.json` with plugin metadata
   - `skills/` folder with one subfolder per skill, each containing a `SKILL.md`
 
-- The `./site/plugins/cirrus3/.claude-plugin/plugin.json` file should have the following structure:
+- The `./site/plugins/cirrus/.claude-plugin/plugin.json` file should have the following structure:
 
 ```json
 {
-  "name": "cirrus3",
-  "description": "AI agent skills for Cirrus 3 HPC system",
+  "name": "cirrus",
+  "description": "AI agent skills for Cirrus HPC system",
   "version": "1.0.0"
 }
 ```
@@ -207,4 +206,4 @@ When creating a new skill, complete the following steps in order:
 - Always include a **Critical Rules** section for any skill where there are hard constraints (rate limits, forbidden commands, security rules).
 - Keep code examples short and self-contained.
 - All URLs in skill files must point to `https://skills.cirrus.ac.uk/…` or `https://docs.cirrus.ac.uk/…`, not to raw GitHub URLs.
-- Markdown files should wrap at 80 characters (VS Code settings enforce this automatically via `.vscode/settings.json`).
+- Markdown files should wrap at 80 characters.

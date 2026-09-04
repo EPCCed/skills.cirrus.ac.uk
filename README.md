@@ -84,150 +84,6 @@ View skills provided by Cirrus plugin:
 
 ```
 
-### Codex
-
-Tested on Codex CLI `0.147.0`.
-
-Add the Cirrus plugin marketplace:
-
-```cirrus-session
-$ codex plugin marketplace add https://skills.cirrus.ac.uk
-Added marketplace `cirrus-skills` from https://skills.cirrus.ac.uk.git.
-Installed marketplace root: .../marketplaces/cirrus-skills
-```
-
-Install the `cirrus` plugin from the marketplace:
-
-```cirrus-session
-$ codex plugin add cirrus@cirrus-skills
-Added plugin `cirrus` from marketplace `cirrus-skills`.
-Installed plugin root: ../cirrus-skills/cirrus/1.0.0
-```
-
-### Cursor
-
-Tested on Cursor CLI `2026.08.04-aaa8809`.
-
-Add the Cirrus plugin marketplace:
-
-```cirrus-session
-$ agent plugin marketplace add https://skills.cirrus.ac.uk
-Fetching plugins from https://skills.cirrus.ac.uk...
-✓ Added marketplace cirrus-skills (1 plugin)
-  cirrus - AI agent skills for Cirrus HPC systems
-Tip: use /plugins in interactive mode to install plugins from this marketplace.
-```
-
-Run the Cursor `agent` CLI tool:
-
-```cirrus-session
-$ agent
-```
-
-Install the `cirrus` plugin from the marketplace:
-
-```cirrus-session
-> /plugin marketplace list
- Marketplaces
-
- Global
-    Cursor Plugin Marketplace • 223 plugins • 0 installed • Never indexed
-
- User
-  → cirrus-skills • 1 plugin • 0 installed • Last indexed 2026-08-11 14:14 UTC
-
-
- Enter for details • Esc to close
-
-> [Press Enter]
-```
-
-```cirrus-session
- Marketplace details / cirrus-skills
-
- Scope: User
- Plugins: 1
- Installed: 1 (cirrus)
- Indexing: Last indexed 2026-08-11 14:14 UTC
- Source: https://skills.cirrus.ac.uk
-
-  → Browse plugins
-    Remove marketplace
-
- Enter to select • Esc to go back
-
-> [Press Enter]
-```
-
-```cirrus-session
- Plugins Installed  Marketplace  (←/→ or tab to cycle)
-
- Install Plugins
-
- ┌──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
- │ ⌕ cirrus-skills                                                                                                                        │
- └──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
-
- → cirrus (cirrus-skills) [installed]
-   AI agent skills for Cirrus HPC systems
-
-
- Enter for details • Esc to clear
-
-> [Press Enter]
-```
-
-```cirrus-session
- Plugins Installed  Marketplace  (←/→ or tab to cycle)
-
- Install Plugins
-
- ┌──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
- │ ⌕ cirrus-skills                                                                                                                        │
- └──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
-
- → cirrus (cirrus-skills)
-   AI agent skills for Cirrus HPC systems
-
-
- Enter for details • Esc to clear
-
-> [Press Enter]
-```
-
-```cirrus-session
- Plugin details / cirrus
-
- AI agent skills for Cirrus HPC systems
-
- Marketplace: cirrus-skills
-
- Skills: 5 (docs, modules, mpi, python, slurm)
-
-  → Install for you (user scope)
-    Install for all collaborators on this repository (project scope)
-
- Enter to select • Esc to go back
-
-> [Press Enter]
-```
-
-### Antigravity
-
-Tested on Antigravity CLI `1.1.12`.
-
-Install the `cirrus` plugin from the Cirrus Skills repository: 
-
-```cirrus-session
-$ agy plugin install https://skills.cirrus.ac.uk
-$ agy plugin enable cirrus
-```
-
-### Other agent-based tools
-
-Paste the skill URL into the tool's context or skill configuration. The
-raw Markdown content is served directly from this site.
-
 ---
 
 ## Repository Structure
@@ -235,22 +91,18 @@ raw Markdown content is served directly from this site.
 ```
 .claude-plugin
   marketplace.json           # Claude Code plugin marketplace catalog
-site/plugins/cirrus/       # All web-served content (GitHub Pages source)
-  .claude-plugin/
-    marketplace.json         # Claude Code plugin marketplace catalog
+site/plugins/cirrus/         # Skills files
   skills/
     slurm/
       SKILL.md               # Slurm skill file (AgentSkills spec format)
     docs/
       SKILL.md               # User documentation skill file (AgentSkills spec format)
-  index.html                 # Public site landing page
+    ...etc..
   marketplace.json           # Simple skills index for other agent tools
-  CNAME                      # Custom domain configuration
 .github/
   agents/
     skills-agent.md          # Instructions for AI agents on creating skills
-.vscode/
-  settings.json              # Word-wrap settings for Markdown/.chatagent files
+CNAME                        # Custom domain configuration
 README.md                    # This file
 ```
 
